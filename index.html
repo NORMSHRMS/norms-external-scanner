@@ -3,44 +3,54 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101d36">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101D36">
 
-<title>NORMS MANAGEMENT | Event Scanner</title>
+<title>NORMS | QR Entry Scanner</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <style>
 :root {
-  --navy:#101d36;
-  --blue:#2458d3;
-  --blue-light:#eef3ff;
-  --green:#16834a;
-  --red:#cf3434;
-  --orange:#d97706;
-  --bg:#f3f6fb;
-  --white:#ffffff;
-  --text:#17243b;
-  --muted:#718096;
-  --border:#e5eaf2;
+  --navy:#101D36;
+  --blue:#2458D3;
+  --green:#16834A;
+  --red:#D93636;
+  --orange:#D97706;
+  --bg:#F3F6FB;
+  --white:#FFFFFF;
+  --text:#17243B;
+  --muted:#7B879A;
+  --border:#E5EAF2;
 }
 
-* { box-sizing:border-box; }
+* {
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html {
+  min-height:100%;
+  background:var(--bg);
+}
 
 body {
   margin:0;
-  font-family:Inter,-apple-system,BlinkMacSystemFont,
-  "Segoe UI",Arial,sans-serif;
-  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
   color:var(--text);
+  background:var(--bg);
+  min-height:100vh;
+  overscroll-behavior-y:contain;
 }
 
-button,select { font:inherit; }
+button,select {
+  font:inherit;
+}
 
 button {
   cursor:pointer;
   border:0;
-  transition:.2s;
+  touch-action:manipulation;
 }
 
 button:disabled {
@@ -48,82 +58,104 @@ button:disabled {
   cursor:not-allowed;
 }
 
+.hidden {
+  display:none!important;
+}
+
 /* HEADER */
 
 .header {
   background:var(--navy);
   color:white;
-  padding:18px 22px;
+  padding:calc(15px + env(safe-area-inset-top)) 18px 17px;
 }
 
 .header-inner {
-  max-width:1050px;
-  margin:auto;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  gap:12px;
+  justify-content:space-between;
+  gap:10px;
 }
 
 .brand {
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:11px;
 }
 
 .brand-logo {
   width:43px;
   height:43px;
   border-radius:12px;
-  background:#ffffff18;
+  background:#FFFFFF18;
   display:grid;
   place-items:center;
   font-size:23px;
+  font-weight:800;
 }
 
-.brand h1 {
+.brand-name {
+  font-size:16px;
+  font-weight:800;
+  letter-spacing:.7px;
   margin:0;
-  font-size:17px;
-  letter-spacing:1px;
 }
 
-.brand p {
-  margin:4px 0 0;
-  color:#b8c6dc;
+.brand-sub {
+  font-size:9px;
+  color:#B9C8E0;
+  letter-spacing:1.6px;
+  margin-top:4px;
+}
+
+.connection-pill {
+  display:flex;
+  align-items:center;
+  gap:6px;
   font-size:10px;
-  letter-spacing:1.5px;
+  color:#D9E6F7;
+  background:#FFFFFF13;
+  border:1px solid #FFFFFF25;
+  border-radius:30px;
+  padding:8px 10px;
+  white-space:nowrap;
 }
 
-.header-tag {
-  font-size:11px;
-  color:#cbd5e1;
-  border:1px solid #ffffff30;
-  padding:8px 12px;
-  border-radius:20px;
+.dot {
+  width:7px;
+  height:7px;
+  background:#F59E0B;
+  border-radius:50%;
+  flex-shrink:0;
 }
 
-/* PAGE */
-
-.container {
-  max-width:1050px;
-  margin:25px auto;
-  padding:0 16px;
+.dot.connected {
+  background:#34D399;
 }
 
-.page-heading {
-  margin-bottom:20px;
+/* MAIN */
+
+.app {
+  width:100%;
+  max-width:600px;
+  margin:auto;
+  padding:18px 15px calc(25px + env(safe-area-inset-bottom));
 }
 
-.page-heading h2 {
+.welcome {
+  margin-bottom:17px;
+}
+
+.welcome h2 {
   margin:0;
-  font-size:23px;
-  font-weight:750;
+  font-size:22px;
+  font-weight:800;
 }
 
-.page-heading p {
+.welcome p {
   color:var(--muted);
-  font-size:13px;
-  margin:7px 0 0;
+  font-size:12px;
+  margin:6px 0 0;
 }
 
 /* CARDS */
@@ -132,63 +164,61 @@ button:disabled {
   background:white;
   border:1px solid var(--border);
   border-radius:17px;
-  padding:20px;
-  box-shadow:0 4px 18px #14213b08;
-  margin-bottom:18px;
+  padding:17px;
+  margin-bottom:15px;
+  box-shadow:0 3px 14px rgba(20,35,60,.035);
 }
 
-.card-heading {
+.section-heading {
   display:flex;
   align-items:center;
-  gap:11px;
-  margin-bottom:17px;
+  gap:10px;
+  margin-bottom:15px;
 }
 
-.card-icon {
-  width:38px;
-  height:38px;
-  border-radius:11px;
+.section-icon {
+  width:37px;
+  height:37px;
+  background:#EEF3FF;
+  color:var(--blue);
   display:grid;
   place-items:center;
-  background:var(--blue-light);
-  color:var(--blue);
+  border-radius:11px;
   font-size:19px;
+  flex-shrink:0;
 }
 
-.card-heading h3 {
+.section-heading h3 {
+  font-size:15px;
   margin:0;
-  font-size:16px;
 }
 
-.card-heading p {
-  margin:4px 0 0;
-  font-size:11px;
+.section-heading p {
+  font-size:10px;
   color:var(--muted);
+  margin:4px 0 0;
 }
 
 /* EVENT */
 
-.event-card {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-  align-items:center;
-}
-
-label {
-  display:block;
-  font-size:12px;
-  font-weight:700;
+.event-label {
+  font-size:10px;
+  font-weight:800;
+  color:var(--muted);
+  letter-spacing:.7px;
   margin-bottom:8px;
+  display:block;
 }
 
 select {
+  display:block;
   width:100%;
-  padding:14px;
+  padding:14px 12px;
   border:1px solid var(--border);
-  border-radius:10px;
-  background:white;
+  border-radius:11px;
+  background:#FAFBFD;
   font-size:14px;
+  font-weight:650;
   color:var(--text);
   outline:none;
 }
@@ -197,233 +227,309 @@ select:focus {
   border-color:var(--blue);
 }
 
-.connection {
-  background:#f8fafc;
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:12px;
-  color:var(--muted);
-  min-height:48px;
-}
-
-.connection-indicator {
-  width:9px;
-  height:9px;
-  flex-shrink:0;
-  background:#f59e0b;
-  border-radius:50%;
-}
-
-.connection-indicator.connected {
-  background:#16a34a;
-}
-
-/* MAIN GRID */
-
-.main-grid {
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:18px;
-  align-items:start;
-}
-
-/* SCANNER */
+/* CAMERA */
 
 .scanner-card {
   text-align:center;
 }
 
-.scanner-intro {
-  color:var(--muted);
+.scanner-description {
   font-size:12px;
   line-height:1.6;
-  margin:-5px 0 17px;
+  color:var(--muted);
+  margin:-5px 0 15px;
+}
+
+.camera-area {
+  position:relative;
+  width:100%;
+  background:#101D36;
+  border-radius:15px;
+  overflow:hidden;
+  min-height:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 #reader {
   width:100%;
-  max-width:430px;
-  min-height:220px;
-  margin:auto;
+  min-height:250px;
   overflow:hidden;
   border-radius:15px;
-  background:#f1f5fb;
 }
 
 #reader video {
-  border-radius:12px;
+  width:100%!important;
+  height:auto!important;
+  object-fit:cover;
+  border-radius:15px;
 }
 
 #reader__scan_region {
-  min-height:220px;
+  min-height:250px;
 }
 
 #reader__dashboard {
-  display:none !important;
+  display:none!important;
 }
 
-.scanner-tip {
-  background:var(--blue-light);
-  color:#3154a0;
-  border-radius:10px;
+#reader__status_span {
+  display:none!important;
+}
+
+.camera-placeholder {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  color:white;
+  pointer-events:none;
+  background:#101D36;
+}
+
+.camera-placeholder .camera-symbol {
+  font-size:48px;
+  opacity:.9;
+}
+
+.camera-placeholder strong {
+  font-size:14px;
+}
+
+.camera-placeholder span {
+  color:#B8C8E0;
+  font-size:11px;
+}
+
+.camera-placeholder.hidden {
+  display:none!important;
+}
+
+.camera-tip {
+  background:#EEF3FF;
+  color:#3154A0;
   padding:12px;
-  margin-top:15px;
+  border-radius:10px;
+  margin-top:13px;
   font-size:11px;
   line-height:1.6;
+  text-align:left;
 }
 
-.actions {
+.camera-tip strong {
+  display:block;
+  margin-bottom:3px;
+}
+
+/* BUTTONS */
+
+.button {
+  width:100%;
+  padding:16px 12px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:800;
   display:flex;
-  gap:10px;
-  margin-top:17px;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:12px;
+  min-height:51px;
 }
 
-.btn {
-  flex:1;
-  padding:14px 12px;
-  border-radius:10px;
-  font-size:12px;
-  font-weight:750;
-}
-
-.btn-primary {
+.primary {
   background:var(--blue);
   color:white;
 }
 
-.btn-primary:hover {
-  background:#1948b5;
+.primary:active {
+  background:#1947B3;
 }
 
-.btn-danger {
-  background:#feecec;
+.danger {
+  background:#FDECEC;
   color:var(--red);
 }
 
-.btn-success {
+.success {
   background:var(--green);
   color:white;
 }
 
-.btn-light {
-  background:#edf1f7;
-  color:#35435a;
+.light {
+  background:#EDF1F7;
+  color:#35435A;
 }
 
+.button-row {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.button-row .button {
+  font-size:12px;
+  padding:14px 5px;
+}
+
+/* STATUS */
+
 .status {
+  margin-top:14px;
   padding:13px;
-  border-radius:10px;
-  background:#eef3ff;
-  color:#3154a0;
-  margin-top:15px;
+  background:#EEF3FF;
+  color:#3154A0;
+  border-radius:11px;
   font-size:12px;
   line-height:1.6;
   text-align:left;
   overflow-wrap:anywhere;
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
 }
 
-.status.success {
-  background:#e4f7eb;
+.status-icon {
+  font-size:16px;
+  flex-shrink:0;
+}
+
+.status.success-status {
+  background:#E4F7EB;
   color:#166534;
 }
 
 .status.error {
-  background:#feecec;
-  color:#a52323;
+  background:#FEECEC;
+  color:#A52323;
 }
 
 .status.warning {
-  background:#fff6df;
-  color:#945c08;
+  background:#FFF6DF;
+  color:#945C08;
 }
 
 /* PARTICIPANT */
 
-.hidden {
-  display:none !important;
-}
-
 .participant-card {
-  border:1px solid #b9e7ca;
-  background:#fbfffc;
+  background:#FAFFFB;
+  border:1px solid #B9E7CA;
   border-radius:13px;
-  padding:16px;
+  padding:15px;
 }
 
-.verified {
+.verified-heading {
   display:flex;
   align-items:center;
   gap:9px;
-  color:#16834a;
+  color:var(--green);
+  font-weight:800;
   font-size:13px;
-  font-weight:750;
-  margin-bottom:15px;
+  margin-bottom:12px;
 }
 
 .verified-icon {
-  width:29px;
-  height:29px;
-  background:#dcfce7;
+  width:30px;
+  height:30px;
+  background:#DCFCE7;
+  border-radius:50%;
   display:grid;
   place-items:center;
-  border-radius:50%;
+  font-size:16px;
 }
 
 .participant-row {
   display:flex;
   justify-content:space-between;
+  align-items:flex-start;
   gap:12px;
   padding:11px 0;
-  border-bottom:1px solid #edf1ee;
+  border-bottom:1px solid #E9F0EA;
   font-size:12px;
 }
 
 .participant-row:last-child {
-  border:0;
+  border-bottom:0;
 }
 
 .participant-row span {
   color:var(--muted);
-  min-width:95px;
+  flex-shrink:0;
+  min-width:85px;
 }
 
 .participant-row strong {
   text-align:right;
   overflow-wrap:anywhere;
+  max-width:65%;
+}
+
+.confirm-button {
+  background:var(--green);
+  color:white;
+  font-size:15px;
+  min-height:57px;
+  margin-top:15px;
+}
+
+.confirm-button:active {
+  background:#116B3D;
 }
 
 /* HISTORY */
 
+.history-header {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.history-header .section-heading {
+  flex:1;
+  margin-bottom:0;
+}
+
+.refresh-button {
+  background:#EEF3FF;
+  color:var(--blue);
+  padding:10px 12px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:800;
+}
+
 .history-list {
-  max-height:360px;
+  margin-top:13px;
+  max-height:300px;
   overflow-y:auto;
 }
 
 .history-item {
   display:flex;
   align-items:center;
-  gap:12px;
-  padding:13px 0;
+  gap:11px;
+  padding:12px 0;
   border-bottom:1px solid var(--border);
 }
 
 .history-item:last-child {
-  border:0;
+  border-bottom:0;
 }
 
 .history-avatar {
   width:37px;
   height:37px;
-  border-radius:50%;
-  background:var(--blue-light);
+  background:#EEF3FF;
   color:var(--blue);
+  border-radius:50%;
   display:grid;
   place-items:center;
-  font-weight:750;
+  font-size:14px;
+  font-weight:800;
   flex-shrink:0;
 }
 
@@ -433,285 +539,295 @@ select:focus {
 }
 
 .history-name {
-  font-size:13px;
-  font-weight:700;
+  font-size:12px;
+  font-weight:750;
   overflow-wrap:anywhere;
 }
 
 .history-meta {
-  font-size:11px;
+  font-size:10px;
   color:var(--muted);
   margin-top:4px;
+  line-height:1.5;
   overflow-wrap:anywhere;
 }
 
-.history-label {
+.history-badge {
+  background:#E5F7EC;
   color:var(--green);
-  background:#e5f7ec;
-  font-size:10px;
-  padding:5px 8px;
+  padding:5px 7px;
   border-radius:20px;
+  font-size:9px;
+  font-weight:800;
   white-space:nowrap;
 }
 
-.refresh {
-  background:var(--blue-light);
-  color:var(--blue);
-  padding:9px 12px;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:700;
-  margin-left:auto;
+.empty-history {
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:23px 5px;
 }
 
 /* FOOTER */
 
 footer {
   text-align:center;
-  color:#8793a6;
-  font-size:11px;
-  padding:22px 10px;
+  padding:12px 5px;
+  font-size:10px;
+  color:#98A3B3;
 }
 
-/* MOBILE */
+/* SMALL SCREENS */
 
-@media(max-width:720px) {
-
-  .header { padding:15px; }
-
-  .brand h1 { font-size:15px; }
-
-  .header-tag { display:none; }
-
-  .container {
-    margin:19px auto;
-    padding:0 12px;
+@media(max-width:370px) {
+  .app {
+    padding-left:11px;
+    padding-right:11px;
   }
 
-  .page-heading h2 { font-size:20px; }
-
-  .event-card {
-    grid-template-columns:1fr;
-    gap:13px;
+  .brand-name {
+    font-size:14px;
   }
 
-  .main-grid {
-    grid-template-columns:1fr;
+  .connection-pill {
+    font-size:9px;
+    padding:7px;
   }
 
   .card {
-    padding:16px;
-    border-radius:14px;
-  }
-
-  #reader {
-    max-width:100%;
-  }
-
-  .btn {
-    padding:14px 7px;
-    font-size:11px;
+    padding:14px;
   }
 }
 
-@media(max-width:360px) {
-  .actions { flex-direction:column; }
-}
 </style>
 </head>
 
 <body>
 
 <header class="header">
+
   <div class="header-inner">
 
     <div class="brand">
-      <div class="brand-logo">⌗</div>
+
+      <div class="brand-logo">N</div>
+
       <div>
-        <h1>NORMS MANAGEMENT</h1>
-        <p>EVENT MANAGEMENT SYSTEM</p>
+        <div class="brand-name">NORMS MANAGEMENT</div>
+        <div class="brand-sub">EVENT MANAGEMENT</div>
       </div>
+
     </div>
 
-    <div class="header-tag">QR ENTRY SCANNER</div>
+    <div class="connection-pill">
+      <span id="headerDot" class="dot"></span>
+      <span id="headerConnection">Connecting</span>
+    </div>
 
   </div>
+
 </header>
 
-<main class="container">
 
-  <div class="page-heading">
+<main class="app">
+
+  <div class="welcome">
     <h2>Event Check-in</h2>
-    <p>Scan, verify and confirm participant entry.</p>
+    <p>Scan and verify participant entry passes.</p>
   </div>
+
 
   <!-- EVENT SELECTION -->
 
   <section class="card">
 
-    <div class="card-heading">
-      <div class="card-icon">▣</div>
-      <div>
-        <h3>Event Selection</h3>
-        <p>Choose the event for participant check-in</p>
-      </div>
-    </div>
+    <div class="section-heading">
 
-    <div class="event-card">
+      <div class="section-icon">▣</div>
 
       <div>
-        <label for="eventSelect">SELECT EVENT</label>
-
-        <select id="eventSelect" disabled>
-          <option value="">Connecting to application...</option>
-        </select>
-      </div>
-
-      <div id="connectionStatus" class="connection">
-        <span class="connection-indicator"></span>
-        Waiting for application connection...
+        <h3>Select Event</h3>
+        <p>Choose the event for check-in</p>
       </div>
 
     </div>
+
+    <label class="event-label" for="eventSelect">
+      CURRENT EVENT
+    </label>
+
+    <select id="eventSelect" disabled>
+      <option value="">Waiting for application connection...</option>
+    </select>
+
+    <div id="connectionStatus" class="status warning">
+      <span class="status-icon">◉</span>
+      <span>Waiting for Google Apps Script...</span>
+    </div>
+
   </section>
 
-  <div class="main-grid">
 
-    <div>
+  <!-- QR SCANNER -->
 
-      <!-- SCANNER -->
+  <section class="card scanner-card">
 
-      <section class="card scanner-card">
+    <div class="section-heading">
 
-        <div class="card-heading">
-          <div class="card-icon">▦</div>
-          <div style="text-align:left">
-            <h3>QR Code Scanner</h3>
-            <p>Scan participant entry pass</p>
-          </div>
-        </div>
+      <div class="section-icon">▦</div>
 
-        <p class="scanner-intro">
-          Position the QR code inside the camera frame
-          to verify the participant.
-        </p>
-
-        <div id="reader"></div>
-
-        <div class="scanner-tip">
-          <strong>Scanning tip</strong><br>
-          Keep the QR code clearly visible and hold
-          your device steady.
-        </div>
-
-        <div class="actions">
-
-          <button id="startBtn"
-            class="btn btn-primary"
-            onclick="startScanner()" disabled>
-            ▶ START SCANNER
-          </button>
-
-          <button id="stopBtn"
-            class="btn btn-danger"
-            onclick="stopScanner()" disabled>
-            ■ STOP CAMERA
-          </button>
-
-        </div>
-
-        <div id="scanStatus" class="status">
-          Connect to the event management application
-          and select an event to begin.
-        </div>
-
-      </section>
-
-      <!-- PARTICIPANT VERIFICATION -->
-
-      <section class="card hidden" id="participantCard">
-
-        <div class="card-heading">
-          <div class="card-icon">✓</div>
-          <div>
-            <h3>Participant Verification</h3>
-            <p>Review details before confirming entry</p>
-          </div>
-        </div>
-
-        <div class="participant-card">
-
-          <div class="verified">
-            <span class="verified-icon">✓</span>
-            PARTICIPANT VERIFIED
-          </div>
-
-          <div id="participantDetails"></div>
-
-        </div>
-
-        <div class="actions">
-
-          <button id="confirmBtn"
-            class="btn btn-success"
-            onclick="confirmEntry()">
-            ✓ CONFIRM ENTRY
-          </button>
-
-          <button class="btn btn-light"
-            onclick="resetScan()">
-            SCAN NEXT
-          </button>
-
-        </div>
-
-      </section>
+      <div style="text-align:left">
+        <h3>QR Code Scanner</h3>
+        <p>Scan participant entry pass</p>
+      </div>
 
     </div>
 
-    <!-- RECENT CHECKINS -->
+    <p class="scanner-description">
+      Position the QR code inside the camera area
+      to verify the participant.
+    </p>
 
-    <div>
+    <div class="camera-area">
 
-      <section class="card">
+      <div id="reader"></div>
 
-        <div class="card-heading">
-          <div class="card-icon">◷</div>
+      <div id="cameraPlaceholder" class="camera-placeholder">
 
-          <div style="flex:1">
-            <h3>Recent Check-ins</h3>
-            <p>Latest confirmed participant entries</p>
-          </div>
+        <div class="camera-symbol">▣</div>
 
-          <button class="refresh"
-            onclick="loadHistory()">
-            ↻ REFRESH
-          </button>
-        </div>
+        <strong>Camera is not active</strong>
 
-        <div id="history" class="history-list">
-          <p class="scanner-intro">
-            Waiting for check-in history...
-          </p>
-        </div>
+        <span>Press START SCANNER to begin</span>
 
-      </section>
+      </div>
 
     </div>
 
-  </div>
+    <div class="camera-tip">
+      <strong>Scanning instructions</strong>
+      Keep the QR code visible, hold your phone steady
+      and ensure sufficient lighting.
+    </div>
+
+    <div class="button-row">
+
+      <button
+        id="startBtn"
+        class="button primary"
+        onclick="startScanner()"
+        disabled>
+        ▶ START SCANNER
+      </button>
+
+      <button
+        id="stopBtn"
+        class="button danger"
+        onclick="stopScanner()"
+        disabled>
+        ■ STOP CAMERA
+      </button>
+
+    </div>
+
+    <div id="scanStatus" class="status">
+      <span class="status-icon">ℹ</span>
+      <span>Connect to the event application and select an event.</span>
+    </div>
+
+  </section>
+
+
+  <!-- PARTICIPANT VERIFICATION -->
+
+  <section class="card hidden" id="participantCard">
+
+    <div class="section-heading">
+
+      <div class="section-icon">✓</div>
+
+      <div>
+        <h3>Participant Verification</h3>
+        <p>Verify the details before confirming entry</p>
+      </div>
+
+    </div>
+
+    <div class="participant-card">
+
+      <div class="verified-heading">
+        <span class="verified-icon">✓</span>
+        PARTICIPANT VERIFIED
+      </div>
+
+      <div id="participantDetails"></div>
+
+    </div>
+
+    <button
+      id="confirmBtn"
+      class="button confirm-button"
+      onclick="confirmEntry()">
+      ✓ CONFIRM ENTRY
+    </button>
+
+    <button
+      class="button light"
+      onclick="resetScan()">
+      CANCEL / SCAN NEXT
+    </button>
+
+  </section>
+
+
+  <!-- RECENT CHECKINS -->
+
+  <section class="card">
+
+    <div class="history-header">
+
+      <div class="section-heading">
+
+        <div class="section-icon">◷</div>
+
+        <div>
+          <h3>Recent Check-ins</h3>
+          <p>Confirmed participant entries</p>
+        </div>
+
+      </div>
+
+      <button class="refresh-button" onclick="loadHistory()">
+        ↻ REFRESH
+      </button>
+
+    </div>
+
+    <div id="history" class="history-list">
+
+      <div class="empty-history">
+        Waiting for check-in history...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <footer>
+    NORMS MANAGEMENT · SECURE EVENT ENTRY SYSTEM
+  </footer>
 
 </main>
 
-<footer>
-  © NORMS MANAGEMENT | Secure Event Entry System
-</footer>
 
 <script>
 "use strict";
 
+
 /* =====================================================
-   GLOBAL VARIABLES
+   1. GLOBAL VARIABLES
 ===================================================== */
 
 let scanner = null;
@@ -728,6 +844,7 @@ let currentQrToken = "";
 let externalParentOrigin = null;
 
 const params = new URLSearchParams(window.location.search);
+
 const nonce = params.get("n");
 const parentOriginParameter = params.get("p");
 
@@ -735,66 +852,120 @@ const eventSelect = document.getElementById("eventSelect");
 
 
 /* =====================================================
-   UI HELPERS
+   2. UI HELPERS
 ===================================================== */
 
 function setStatus(message, type = "") {
+
   const element = document.getElementById("scanStatus");
+
   element.className = "status" + (type ? " " + type : "");
-  element.textContent = message;
+
+  const icon = document.createElement("span");
+  icon.className = "status-icon";
+
+  if (type === "success-status" || type === "success") {
+    icon.textContent = "✓";
+  } else if (type === "error") {
+    icon.textContent = "!";
+  } else {
+    icon.textContent = "ℹ";
+  }
+
+  const text = document.createElement("span");
+  text.textContent = message;
+
+  element.replaceChildren(icon, text);
+
 }
+
 
 function setConnection(message, type = "") {
 
   const element = document.getElementById("connectionStatus");
 
-  element.className = "connection";
+  element.className = "status" +
+    (type === "success" ? " success-status" :
+     type === "error" ? " error" :
+     type === "warning" ? " warning" : "");
 
-  const indicator = document.createElement("span");
+  const icon = document.createElement("span");
+  icon.className = "status-icon";
+  icon.textContent = "◉";
 
-  indicator.className =
-    "connection-indicator" +
-    (type === "success" ? " connected" : "");
+  const text = document.createElement("span");
+  text.textContent = message;
 
-  element.replaceChildren(
-    indicator,
-    document.createTextNode(message)
-  );
+  element.replaceChildren(icon, text);
+
+  const dot = document.getElementById("headerDot");
+  const headerText = document.getElementById("headerConnection");
+
+  dot.className = "dot" + (type === "success" ? " connected" : "");
+
+  headerText.textContent =
+    type === "success" ? "Connected" :
+    type === "error" ? "Disconnected" :
+    "Connecting";
+
 }
+
 
 function showParticipantCard(show) {
+
   document.getElementById("participantCard")
     .classList.toggle("hidden", !show);
+
 }
 
+
 function safeText(value) {
+
   if (value === undefined || value === null || value === "") {
     return "-";
   }
+
   return String(value);
+
 }
 
 
 /* =====================================================
-   VALIDATE PARENT ORIGIN
+   3. VALIDATE PARENT ORIGIN
 ===================================================== */
 
 function validateParentOrigin() {
 
   if (!window.opener) {
+
     setConnection(
-      "Please open scanner from the authenticated application.",
+      "Please open this scanner from the authenticated Google Apps Script application.",
       "error"
     );
+
+    setStatus(
+      "Scanner must be launched from the event management application.",
+      "error"
+    );
+
     return false;
+
   }
 
   if (!nonce || !parentOriginParameter) {
+
     setConnection(
       "Scanner connection parameters are missing.",
       "error"
     );
+
+    setStatus(
+      "Open the scanner using the application scanner button.",
+      "error"
+    );
+
     return false;
+
   }
 
   try {
@@ -806,31 +977,43 @@ function validateParentOrigin() {
       parentURL.hostname.endsWith(".googleusercontent.com");
 
     if (parentURL.protocol !== "https:" || !allowedHost) {
+
       setConnection("Invalid Google Apps Script origin.", "error");
+
       return false;
+
     }
 
     externalParentOrigin = parentURL.origin;
+
     return true;
 
   } catch (error) {
 
     setConnection("Invalid parent application address.", "error");
+
     return false;
 
   }
+
 }
 
 
 /* =====================================================
-   PARENT COMMUNICATION
+   4. SEND MESSAGE TO PARENT APPLICATION
 ===================================================== */
 
 function sendToParent(type, data = {}) {
 
   if (!window.opener || !externalParentOrigin || !nonce) {
-    setConnection("Parent application connection unavailable.", "error");
+
+    setConnection(
+      "Parent application connection is unavailable.",
+      "error"
+    );
+
     return false;
+
   }
 
   try {
@@ -848,45 +1031,66 @@ function sendToParent(type, data = {}) {
 
   } catch (error) {
 
-    setConnection("Unable to communicate with parent application.", "error");
+    setConnection(
+      "Unable to communicate with the parent application.",
+      "error"
+    );
+
     return false;
 
   }
+
 }
 
 
 /* =====================================================
-   RECEIVE PARENT MESSAGES
+   5. RECEIVE MESSAGES FROM GOOGLE APPS SCRIPT
 ===================================================== */
 
 window.addEventListener("message", function(event) {
 
   if (!externalParentOrigin) return;
+
   if (event.origin !== externalParentOrigin) return;
+
   if (event.source !== window.opener) return;
 
   const data = event.data || {};
 
   if (data.app !== "NORMS_EVENT_PARENT") return;
+
   if (data.nonce !== nonce) return;
+
 
   switch (data.type) {
 
     case "INIT":
+
       handleInitialization(data.events || []);
+
       break;
+
 
     case "VALIDATION_RESULT":
+
       handleValidation(data.response);
+
       break;
+
 
     case "CHECKIN_RESULT":
+
       handleCheckin(data.response);
+
       break;
 
+
     case "HISTORY_RESULT":
+
       renderHistory(data.records || []);
+
       break;
+
 
     case "PARENT_ERROR":
 
@@ -898,13 +1102,14 @@ window.addEventListener("message", function(event) {
       );
 
       break;
+
   }
 
 });
 
 
 /* =====================================================
-   EVENT INITIALIZATION
+   6. INITIALIZE EVENT LIST
 ===================================================== */
 
 function handleInitialization(events) {
@@ -919,6 +1124,7 @@ function handleInitialization(events) {
     eventSelect.disabled = true;
 
     const option = document.createElement("option");
+
     option.value = "";
     option.textContent = "No active events available";
 
@@ -932,11 +1138,13 @@ function handleInitialization(events) {
     );
 
     return;
+
   }
 
   events.forEach(function(item) {
 
     const eventId = item.eventId || item.Event_ID;
+
     const eventName = item.eventName || item.Event_Name;
 
     if (!eventId || !eventName) return;
@@ -951,25 +1159,35 @@ function handleInitialization(events) {
   });
 
   if (eventSelect.options.length === 0) {
+
     setConnection("Event data format is invalid.", "error");
+
     return;
+
   }
 
   eventSelect.disabled = false;
+
   currentEvent = eventSelect.value;
 
   document.getElementById("startBtn").disabled = false;
 
-  setConnection("Connected to NORMS Event Management.", "success");
+  setConnection(
+    "Connected to NORMS Event Management.",
+    "success"
+  );
 
-  setStatus("Event loaded. Start the scanner to begin.");
+  setStatus(
+    "Event loaded. Start the camera to scan participants."
+  );
 
   loadHistory();
+
 }
 
 
 /* =====================================================
-   EVENT CHANGE
+   7. EVENT CHANGE
 ===================================================== */
 
 eventSelect.addEventListener("change", function() {
@@ -977,48 +1195,83 @@ eventSelect.addEventListener("change", function() {
   currentEvent = this.value;
 
   resetScan();
+
   loadHistory();
 
 });
 
 
 /* =====================================================
-   START CAMERA
+   8. START CAMERA
 ===================================================== */
 
 async function startScanner() {
 
   if (!connected || !eventsLoaded) {
-    setStatus("Waiting for application connection.", "error");
+
+    setStatus(
+      "Waiting for the event management connection.",
+      "error"
+    );
+
     return;
+
   }
 
   if (!currentEvent) {
+
     setStatus("Please select an event first.", "error");
+
     return;
+
   }
 
   if (scannerRunning) return;
 
   if (typeof Html5Qrcode === "undefined") {
-    setStatus("QR scanner library could not be loaded.", "error");
+
+    setStatus(
+      "QR scanner library could not be loaded. Check internet connection.",
+      "error"
+    );
+
     return;
+
   }
 
   try {
 
     if (!scanner) {
+
       scanner = new Html5Qrcode("reader");
+
     }
+
+    document.getElementById("startBtn").disabled = true;
 
     await scanner.start(
 
       { facingMode: "environment" },
 
       {
+
         fps: 10,
-        qrbox: { width: 240, height: 240 },
+
+        qrbox: function(viewfinderWidth, viewfinderHeight) {
+
+          const size = Math.floor(
+            Math.min(viewfinderWidth, viewfinderHeight) * 0.70
+          );
+
+          return {
+            width: Math.min(size, 280),
+            height: Math.min(size, 280)
+          };
+
+        },
+
         aspectRatio: 1
+
       },
 
       onScanSuccess,
@@ -1030,13 +1283,19 @@ async function startScanner() {
     scannerRunning = true;
 
     document.getElementById("startBtn").disabled = true;
+
     document.getElementById("stopBtn").disabled = false;
+
+    document.getElementById("cameraPlaceholder")
+      .classList.add("hidden");
 
     setStatus(
       "Camera active. Position the participant QR code inside the scanning area."
     );
 
   } catch (error) {
+
+    document.getElementById("startBtn").disabled = false;
 
     setStatus(
       "Camera access failed. Allow camera permission and use HTTPS. " +
@@ -1045,11 +1304,12 @@ async function startScanner() {
     );
 
   }
+
 }
 
 
 /* =====================================================
-   STOP CAMERA
+   9. STOP CAMERA
 ===================================================== */
 
 async function stopScanner() {
@@ -1063,13 +1323,20 @@ async function stopScanner() {
     scannerRunning = false;
 
     document.getElementById("startBtn").disabled = false;
+
     document.getElementById("stopBtn").disabled = true;
+
+    document.getElementById("cameraPlaceholder")
+      .classList.remove("hidden");
 
     setStatus("Camera stopped.");
 
   } catch (error) {
 
-    setStatus("Unable to stop camera: " + String(error), "error");
+    setStatus(
+      "Unable to stop camera: " + String(error),
+      "error"
+    );
 
   }
 
@@ -1077,7 +1344,7 @@ async function stopScanner() {
 
 
 /* =====================================================
-   EXTRACT QR TOKEN
+   10. EXTRACT QR TOKEN
 ===================================================== */
 
 function extractToken(value) {
@@ -1100,7 +1367,7 @@ function extractToken(value) {
 
 
 /* =====================================================
-   QR SCAN
+   11. PROCESS SCANNED QR CODE
 ===================================================== */
 
 function onScanSuccess(decodedText) {
@@ -1108,34 +1375,51 @@ function onScanSuccess(decodedText) {
   if (busy || currentPass) return;
 
   if (!currentEvent) {
+
     setStatus("Please select an event.", "error");
+
     return;
+
   }
 
   const qrToken = extractToken(decodedText);
 
   if (!qrToken) {
-    setStatus("QR code does not contain a valid token.", "error");
+
+    setStatus(
+      "QR code does not contain a valid token.",
+      "error"
+    );
+
     return;
+
   }
 
   busy = true;
+
   currentQrToken = qrToken;
 
   setStatus("QR detected. Verifying participant...");
 
   const sent = sendToParent("VALIDATE_QR", {
+
     eventId: currentEvent,
+
     qrToken: qrToken
+
   });
 
-  if (!sent) busy = false;
+  if (!sent) {
+
+    busy = false;
+
+  }
 
 }
 
 
 /* =====================================================
-   VALIDATION RESULT
+   12. PARTICIPANT VALIDATION RESULT
 ===================================================== */
 
 function handleValidation(response) {
@@ -1145,6 +1429,7 @@ function handleValidation(response) {
   if (!response || response.success !== true) {
 
     currentPass = null;
+
     currentQrToken = "";
 
     showParticipantCard(false);
@@ -1157,9 +1442,11 @@ function handleValidation(response) {
     );
 
     return;
+
   }
 
   const participant = response.participant || {};
+
   const pass = response.pass || response;
 
   currentPass = {
@@ -1185,12 +1472,14 @@ function handleValidation(response) {
     showParticipantCard(false);
 
     setStatus(
-      "Participant returned, but Pass ID is missing.",
+      "Participant was returned, but Pass ID is missing in the validation response.",
       "error"
     );
 
     currentPass = null;
+
     return;
+
   }
 
   renderParticipant(participant, currentPass);
@@ -1199,13 +1488,22 @@ function handleValidation(response) {
 
   document.getElementById("confirmBtn").disabled = false;
 
-  setStatus("Participant verified successfully. Confirm entry.", "success");
+  setStatus(
+    "Participant verified successfully. Confirm entry.",
+    "success-status"
+  );
+
+  document.getElementById("participantCard")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
 
 }
 
 
 /* =====================================================
-   PARTICIPANT DETAILS
+   13. DISPLAY PARTICIPANT DETAILS
 ===================================================== */
 
 function renderParticipant(participant, pass) {
@@ -1217,10 +1515,15 @@ function renderParticipant(participant, pass) {
   const fields = [
 
     ["Name", participant.name || participant.Name],
+
     ["Organization", participant.organization || participant.Organization],
+
     ["Designation", participant.designation || participant.Designation],
+
     ["Mobile", participant.mobile || participant.Mobile],
+
     ["Email", participant.email || participant.Email],
+
     ["Pass ID", pass.passId]
 
   ];
@@ -1228,15 +1531,19 @@ function renderParticipant(participant, pass) {
   fields.forEach(function(field) {
 
     const row = document.createElement("div");
+
     row.className = "participant-row";
 
     const label = document.createElement("span");
+
     label.textContent = field[0];
 
     const value = document.createElement("strong");
+
     value.textContent = safeText(field[1]);
 
     row.appendChild(label);
+
     row.appendChild(value);
 
     container.appendChild(row);
@@ -1247,14 +1554,18 @@ function renderParticipant(participant, pass) {
 
 
 /* =====================================================
-   CONFIRM ENTRY
+   14. CONFIRM ENTRY
 ===================================================== */
 
 function confirmEntry() {
 
   if (!currentPass || !currentEvent || !currentQrToken) {
 
-    setStatus("Participant or QR token information is missing.", "error");
+    setStatus(
+      "Participant or QR token information is missing.",
+      "error"
+    );
+
     return;
 
   }
@@ -1270,8 +1581,11 @@ function confirmEntry() {
   const sent = sendToParent("CONFIRM_CHECKIN", {
 
     eventId: currentEvent,
+
     passId: currentPass.passId,
+
     qrToken: currentQrToken,
+
     deviceInfo: navigator.userAgent
 
   });
@@ -1279,6 +1593,7 @@ function confirmEntry() {
   if (!sent) {
 
     busy = false;
+
     document.getElementById("confirmBtn").disabled = false;
 
   }
@@ -1287,7 +1602,7 @@ function confirmEntry() {
 
 
 /* =====================================================
-   CHECK-IN RESULT
+   15. CHECK-IN RESULT
 ===================================================== */
 
 function handleCheckin(response) {
@@ -1298,17 +1613,21 @@ function handleCheckin(response) {
 
     setStatus(
       response.message || "Participant entry confirmed successfully.",
-      "success"
+      "success-status"
     );
 
     currentPass = null;
+
     currentQrToken = "";
 
     showParticipantCard(false);
 
     loadHistory();
 
+    // Keep camera running for the next participant.
+
     return;
+
   }
 
   setStatus(
@@ -1324,13 +1643,15 @@ function handleCheckin(response) {
 
 
 /* =====================================================
-   RESET SCAN
+   16. RESET PARTICIPANT
 ===================================================== */
 
 function resetScan() {
 
   currentPass = null;
+
   currentQrToken = "";
+
   busy = false;
 
   showParticipantCard(false);
@@ -1343,7 +1664,7 @@ function resetScan() {
 
 
 /* =====================================================
-   LOAD HISTORY
+   17. LOAD RECENT CHECK-INS
 ===================================================== */
 
 function loadHistory() {
@@ -1351,14 +1672,16 @@ function loadHistory() {
   if (!connected || !currentEvent) return;
 
   sendToParent("LOAD_HISTORY", {
+
     eventId: currentEvent
+
   });
 
 }
 
 
 /* =====================================================
-   DISPLAY HISTORY
+   18. DISPLAY RECENT CHECK-INS
 ===================================================== */
 
 function renderHistory(records) {
@@ -1369,51 +1692,68 @@ function renderHistory(records) {
 
   if (!Array.isArray(records) || records.length === 0) {
 
-    const message = document.createElement("p");
+    const message = document.createElement("div");
 
-    message.className = "scanner-intro";
+    message.className = "empty-history";
+
     message.textContent = "No check-in records found.";
 
     container.appendChild(message);
 
     return;
+
   }
 
   records.forEach(function(item) {
 
     const row = document.createElement("div");
+
     row.className = "history-item";
 
+    const nameText = safeText(item.name || item.Name);
+
     const avatar = document.createElement("div");
+
     avatar.className = "history-avatar";
 
-    const nameText = safeText(item.name || item.Name);
     avatar.textContent = nameText.charAt(0).toUpperCase();
 
     const info = document.createElement("div");
+
     info.className = "history-info";
 
     const name = document.createElement("div");
+
     name.className = "history-name";
+
     name.textContent = nameText;
 
     const details = document.createElement("div");
+
     details.className = "history-meta";
 
     details.textContent = [
+
       item.organization || item.Organization || "",
+
       item.time || item.Time || item.checkInTime || ""
+
     ].filter(Boolean).join(" | ");
 
-    const badge = document.createElement("span");
-    badge.className = "history-label";
+    const badge = document.createElement("div");
+
+    badge.className = "history-badge";
+
     badge.textContent = "CHECKED IN";
 
     info.appendChild(name);
+
     info.appendChild(details);
 
     row.appendChild(avatar);
+
     row.appendChild(info);
+
     row.appendChild(badge);
 
     container.appendChild(row);
@@ -1424,7 +1764,7 @@ function renderHistory(records) {
 
 
 /* =====================================================
-   INITIALIZE CONNECTION
+   19. INITIALIZE SCANNER CONNECTION
 ===================================================== */
 
 function initializeConnection() {
@@ -1439,7 +1779,7 @@ function initializeConnection() {
 
 
 /* =====================================================
-   START APPLICATION
+   20. START
 ===================================================== */
 
 initializeConnection();
