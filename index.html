@@ -3,1788 +3,1160 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101D36">
-
-<title>NORMS | QR Entry Scanner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101d35">
+<title>NORMS QR Scanner</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <style>
 :root {
-  --navy:#101D36;
-  --blue:#2458D3;
-  --green:#16834A;
-  --red:#D93636;
-  --orange:#D97706;
-  --bg:#F3F6FB;
-  --white:#FFFFFF;
-  --text:#17243B;
-  --muted:#7B879A;
-  --border:#E5EAF2;
+  --navy: #101d35;
+  --blue: #2563eb;
+  --green: #16a34a;
+  --red: #dc2626;
+  --light: #f3f6fb;
+  --text: #172033;
+  --muted: #64748b;
 }
 
 * {
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html {
-  min-height:100%;
-  background:var(--bg);
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--light);
+  color: var(--text);
 }
 
 body {
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  color:var(--text);
-  background:var(--bg);
-  min-height:100vh;
-  overscroll-behavior-y:contain;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-button,select {
-  font:inherit;
+.app {
+  width: 100%;
+  max-width: 600px;
+  min-height: 100vh;
+  margin: auto;
+  background: var(--light);
 }
-
-button {
-  cursor:pointer;
-  border:0;
-  touch-action:manipulation;
-}
-
-button:disabled {
-  opacity:.45;
-  cursor:not-allowed;
-}
-
-.hidden {
-  display:none!important;
-}
-
-/* HEADER */
 
 .header {
-  background:var(--navy);
-  color:white;
-  padding:calc(15px + env(safe-area-inset-top)) 18px 17px;
+  background: var(--navy);
+  color: white;
+  padding: calc(18px + env(safe-area-inset-top)) 18px 20px;
+  border-radius: 0 0 22px 22px;
 }
 
-.header-inner {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
 .brand {
-  display:flex;
-  align-items:center;
-  gap:11px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
-.brand-logo {
-  width:43px;
-  height:43px;
-  border-radius:12px;
-  background:#FFFFFF18;
-  display:grid;
-  place-items:center;
-  font-size:23px;
-  font-weight:800;
+.subtitle {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin-top: 5px;
 }
-
-.brand-name {
-  font-size:16px;
-  font-weight:800;
-  letter-spacing:.7px;
-  margin:0;
-}
-
-.brand-sub {
-  font-size:9px;
-  color:#B9C8E0;
-  letter-spacing:1.6px;
-  margin-top:4px;
-}
-
-.connection-pill {
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:10px;
-  color:#D9E6F7;
-  background:#FFFFFF13;
-  border:1px solid #FFFFFF25;
-  border-radius:30px;
-  padding:8px 10px;
-  white-space:nowrap;
-}
-
-.dot {
-  width:7px;
-  height:7px;
-  background:#F59E0B;
-  border-radius:50%;
-  flex-shrink:0;
-}
-
-.dot.connected {
-  background:#34D399;
-}
-
-/* MAIN */
-
-.app {
-  width:100%;
-  max-width:600px;
-  margin:auto;
-  padding:18px 15px calc(25px + env(safe-area-inset-bottom));
-}
-
-.welcome {
-  margin-bottom:17px;
-}
-
-.welcome h2 {
-  margin:0;
-  font-size:22px;
-  font-weight:800;
-}
-
-.welcome p {
-  color:var(--muted);
-  font-size:12px;
-  margin:6px 0 0;
-}
-
-/* CARDS */
-
-.card {
-  background:white;
-  border:1px solid var(--border);
-  border-radius:17px;
-  padding:17px;
-  margin-bottom:15px;
-  box-shadow:0 3px 14px rgba(20,35,60,.035);
-}
-
-.section-heading {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:15px;
-}
-
-.section-icon {
-  width:37px;
-  height:37px;
-  background:#EEF3FF;
-  color:var(--blue);
-  display:grid;
-  place-items:center;
-  border-radius:11px;
-  font-size:19px;
-  flex-shrink:0;
-}
-
-.section-heading h3 {
-  font-size:15px;
-  margin:0;
-}
-
-.section-heading p {
-  font-size:10px;
-  color:var(--muted);
-  margin:4px 0 0;
-}
-
-/* EVENT */
-
-.event-label {
-  font-size:10px;
-  font-weight:800;
-  color:var(--muted);
-  letter-spacing:.7px;
-  margin-bottom:8px;
-  display:block;
-}
-
-select {
-  display:block;
-  width:100%;
-  padding:14px 12px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  background:#FAFBFD;
-  font-size:14px;
-  font-weight:650;
-  color:var(--text);
-  outline:none;
-}
-
-select:focus {
-  border-color:var(--blue);
-}
-
-/* CAMERA */
-
-.scanner-card {
-  text-align:center;
-}
-
-.scanner-description {
-  font-size:12px;
-  line-height:1.6;
-  color:var(--muted);
-  margin:-5px 0 15px;
-}
-
-.camera-area {
-  position:relative;
-  width:100%;
-  background:#101D36;
-  border-radius:15px;
-  overflow:hidden;
-  min-height:250px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-#reader {
-  width:100%;
-  min-height:250px;
-  overflow:hidden;
-  border-radius:15px;
-}
-
-#reader video {
-  width:100%!important;
-  height:auto!important;
-  object-fit:cover;
-  border-radius:15px;
-}
-
-#reader__scan_region {
-  min-height:250px;
-}
-
-#reader__dashboard {
-  display:none!important;
-}
-
-#reader__status_span {
-  display:none!important;
-}
-
-.camera-placeholder {
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  color:white;
-  pointer-events:none;
-  background:#101D36;
-}
-
-.camera-placeholder .camera-symbol {
-  font-size:48px;
-  opacity:.9;
-}
-
-.camera-placeholder strong {
-  font-size:14px;
-}
-
-.camera-placeholder span {
-  color:#B8C8E0;
-  font-size:11px;
-}
-
-.camera-placeholder.hidden {
-  display:none!important;
-}
-
-.camera-tip {
-  background:#EEF3FF;
-  color:#3154A0;
-  padding:12px;
-  border-radius:10px;
-  margin-top:13px;
-  font-size:11px;
-  line-height:1.6;
-  text-align:left;
-}
-
-.camera-tip strong {
-  display:block;
-  margin-bottom:3px;
-}
-
-/* BUTTONS */
-
-.button {
-  width:100%;
-  padding:16px 12px;
-  border-radius:12px;
-  font-size:13px;
-  font-weight:800;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  margin-top:12px;
-  min-height:51px;
-}
-
-.primary {
-  background:var(--blue);
-  color:white;
-}
-
-.primary:active {
-  background:#1947B3;
-}
-
-.danger {
-  background:#FDECEC;
-  color:var(--red);
-}
-
-.success {
-  background:var(--green);
-  color:white;
-}
-
-.light {
-  background:#EDF1F7;
-  color:#35435A;
-}
-
-.button-row {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-}
-
-.button-row .button {
-  font-size:12px;
-  padding:14px 5px;
-}
-
-/* STATUS */
 
 .status {
-  margin-top:14px;
-  padding:13px;
-  background:#EEF3FF;
-  color:#3154A0;
-  border-radius:11px;
-  font-size:12px;
-  line-height:1.6;
-  text-align:left;
-  overflow-wrap:anywhere;
-  display:flex;
-  align-items:flex-start;
-  gap:9px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 11px;
+  border-radius: 20px;
+  background: #475569;
+  color: white;
+  text-align: center;
 }
 
-.status-icon {
-  font-size:16px;
-  flex-shrink:0;
-}
-
-.status.success-status {
-  background:#E4F7EB;
-  color:#166534;
+.status.ready {
+  background: #166534;
 }
 
 .status.error {
-  background:#FEECEC;
-  color:#A52323;
+  background: #991b1b;
 }
 
-.status.warning {
-  background:#FFF6DF;
-  color:#945C08;
+.status.success-status {
+  background: #15803d;
 }
 
-/* PARTICIPANT */
+.content {
+  padding: 16px;
+}
+
+.panel {
+  background: white;
+  border-radius: 17px;
+  padding: 16px;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 14px rgba(15, 23, 42, .06);
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+
+select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #dbe2ea;
+  border-radius: 11px;
+  padding: 0 12px;
+  background: white;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.camera-panel {
+  padding: 12px;
+}
+
+.camera-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 3px 3px 12px;
+}
+
+.camera-heading strong {
+  font-size: 15px;
+}
+
+.camera-heading span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.camera-box {
+  position: relative;
+  width: 100%;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #0b1220;
+}
+
+#reader {
+  width: 100%;
+  min-height: 260px;
+  background: #0b1220;
+}
+
+#reader video {
+  width: 100% !important;
+  object-fit: cover !important;
+  border-radius: 15px;
+}
+
+#reader__dashboard,
+#reader__status_span,
+#reader__header_message {
+  display: none !important;
+}
+
+.camera-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+  color: white;
+  background: #0b1220;
+}
+
+.camera-placeholder .camera-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.camera-placeholder strong {
+  font-size: 16px;
+}
+
+.camera-placeholder p {
+  color: #aebbd0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.camera-placeholder.hidden {
+  display: none;
+}
+
+.button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  min-height: 49px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--blue);
+  color: white;
+}
+
+.success {
+  background: var(--green);
+  color: white;
+}
+
+.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.secondary {
+  background: #e8edf5;
+  color: #263449;
+}
+
+.hidden {
+  display: none !important;
+}
 
 .participant-card {
-  background:#FAFFFB;
-  border:1px solid #B9E7CA;
-  border-radius:13px;
-  padding:15px;
+  border: 1px solid #bbf7d0;
+  background: white;
 }
 
 .verified-heading {
-  display:flex;
-  align-items:center;
-  gap:9px;
-  color:var(--green);
-  font-weight:800;
-  font-size:13px;
-  margin-bottom:12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #166534;
+  font-weight: 800;
+  margin-bottom: 14px;
 }
 
 .verified-icon {
-  width:30px;
-  height:30px;
-  background:#DCFCE7;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:16px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #dcfce7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 }
 
-.participant-row {
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  padding:11px 0;
-  border-bottom:1px solid #E9F0EA;
-  font-size:12px;
+.participant-name {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
 }
 
-.participant-row:last-child {
-  border-bottom:0;
+.detail {
+  padding: 10px 0;
+  border-bottom: 1px solid #edf0f4;
 }
 
-.participant-row span {
-  color:var(--muted);
-  flex-shrink:0;
-  min-width:85px;
+.detail:last-child {
+  border-bottom: none;
 }
 
-.participant-row strong {
-  text-align:right;
-  overflow-wrap:anywhere;
-  max-width:65%;
+.detail-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
 }
 
-.confirm-button {
-  background:var(--green);
-  color:white;
-  font-size:15px;
-  min-height:57px;
-  margin-top:15px;
+.detail-value {
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
-.confirm-button:active {
-  background:#116B3D;
+.action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
 }
 
-/* HISTORY */
-
-.history-header {
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.history-header .section-heading {
-  flex:1;
-  margin-bottom:0;
-}
-
-.refresh-button {
-  background:#EEF3FF;
-  color:var(--blue);
-  padding:10px 12px;
-  border-radius:9px;
-  font-size:11px;
-  font-weight:800;
-}
-
-.history-list {
-  margin-top:13px;
-  max-height:300px;
-  overflow-y:auto;
+.action-row .button {
+  flex: 1;
+  margin-top: 0;
 }
 
 .history-item {
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:12px 0;
-  border-bottom:1px solid var(--border);
+  padding: 11px 0;
+  border-bottom: 1px solid #edf0f4;
 }
 
 .history-item:last-child {
-  border-bottom:0;
-}
-
-.history-avatar {
-  width:37px;
-  height:37px;
-  background:#EEF3FF;
-  color:var(--blue);
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:14px;
-  font-weight:800;
-  flex-shrink:0;
-}
-
-.history-info {
-  flex:1;
-  min-width:0;
+  border-bottom: none;
 }
 
 .history-name {
-  font-size:12px;
-  font-weight:750;
-  overflow-wrap:anywhere;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .history-meta {
-  font-size:10px;
-  color:var(--muted);
-  margin-top:4px;
-  line-height:1.5;
-  overflow-wrap:anywhere;
-}
-
-.history-badge {
-  background:#E5F7EC;
-  color:var(--green);
-  padding:5px 7px;
-  border-radius:20px;
-  font-size:9px;
-  font-weight:800;
-  white-space:nowrap;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
 }
 
 .empty-history {
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:23px 5px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  padding: 15px 5px;
 }
 
-/* FOOTER */
-
-footer {
-  text-align:center;
-  padding:12px 5px;
-  font-size:10px;
-  color:#98A3B3;
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.5;
+  padding: 5px 10px 15px;
 }
 
-/* SMALL SCREENS */
-
-@media(max-width:370px) {
-  .app {
-    padding-left:11px;
-    padding-right:11px;
+@media (max-width: 380px) {
+  .content {
+    padding: 11px;
   }
 
-  .brand-name {
-    font-size:14px;
+  .header {
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
-  .connection-pill {
-    font-size:9px;
-    padding:7px;
+  .brand {
+    font-size: 17px;
   }
 
-  .card {
-    padding:14px;
+  .camera-box,
+  #reader {
+    min-height: 230px;
+  }
+
+  .participant-name {
+    font-size: 18px;
   }
 }
-
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<header class="header">
-
-  <div class="header-inner">
-
-    <div class="brand">
-
-      <div class="brand-logo">N</div>
-
+  <header class="header">
+    <div class="header-row">
       <div>
-        <div class="brand-name">NORMS MANAGEMENT</div>
-        <div class="brand-sub">EVENT MANAGEMENT</div>
+        <div class="brand">NORMS MANAGEMENT</div>
+        <div class="subtitle">Event QR Entry Scanner</div>
+      </div>
+      <div class="status" id="connectionStatus">Connecting...</div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="panel">
+      <div class="panel-title">Event Selection</div>
+      <label for="eventSelect">Select Event</label>
+      <select id="eventSelect" disabled>
+        <option value="">Loading events...</option>
+      </select>
+    </section>
+
+    <section class="panel camera-panel">
+      <div class="camera-heading">
+        <strong>QR Code Scanner</strong>
+        <span id="cameraStatus">Camera not started</span>
       </div>
 
-    </div>
+      <div class="camera-box">
+        <div id="reader"></div>
 
-    <div class="connection-pill">
-      <span id="headerDot" class="dot"></span>
-      <span id="headerConnection">Connecting</span>
-    </div>
-
-  </div>
-
-</header>
-
-
-<main class="app">
-
-  <div class="welcome">
-    <h2>Event Check-in</h2>
-    <p>Scan and verify participant entry passes.</p>
-  </div>
-
-
-  <!-- EVENT SELECTION -->
-
-  <section class="card">
-
-    <div class="section-heading">
-
-      <div class="section-icon">▣</div>
-
-      <div>
-        <h3>Select Event</h3>
-        <p>Choose the event for check-in</p>
-      </div>
-
-    </div>
-
-    <label class="event-label" for="eventSelect">
-      CURRENT EVENT
-    </label>
-
-    <select id="eventSelect" disabled>
-      <option value="">Waiting for application connection...</option>
-    </select>
-
-    <div id="connectionStatus" class="status warning">
-      <span class="status-icon">◉</span>
-      <span>Waiting for Google Apps Script...</span>
-    </div>
-
-  </section>
-
-
-  <!-- QR SCANNER -->
-
-  <section class="card scanner-card">
-
-    <div class="section-heading">
-
-      <div class="section-icon">▦</div>
-
-      <div style="text-align:left">
-        <h3>QR Code Scanner</h3>
-        <p>Scan participant entry pass</p>
-      </div>
-
-    </div>
-
-    <p class="scanner-description">
-      Position the QR code inside the camera area
-      to verify the participant.
-    </p>
-
-    <div class="camera-area">
-
-      <div id="reader"></div>
-
-      <div id="cameraPlaceholder" class="camera-placeholder">
-
-        <div class="camera-symbol">▣</div>
-
-        <strong>Camera is not active</strong>
-
-        <span>Press START SCANNER to begin</span>
-
-      </div>
-
-    </div>
-
-    <div class="camera-tip">
-      <strong>Scanning instructions</strong>
-      Keep the QR code visible, hold your phone steady
-      and ensure sufficient lighting.
-    </div>
-
-    <div class="button-row">
-
-      <button
-        id="startBtn"
-        class="button primary"
-        onclick="startScanner()"
-        disabled>
-        ▶ START SCANNER
-      </button>
-
-      <button
-        id="stopBtn"
-        class="button danger"
-        onclick="stopScanner()"
-        disabled>
-        ■ STOP CAMERA
-      </button>
-
-    </div>
-
-    <div id="scanStatus" class="status">
-      <span class="status-icon">ℹ</span>
-      <span>Connect to the event application and select an event.</span>
-    </div>
-
-  </section>
-
-
-  <!-- PARTICIPANT VERIFICATION -->
-
-  <section class="card hidden" id="participantCard">
-
-    <div class="section-heading">
-
-      <div class="section-icon">✓</div>
-
-      <div>
-        <h3>Participant Verification</h3>
-        <p>Verify the details before confirming entry</p>
-      </div>
-
-    </div>
-
-    <div class="participant-card">
-
-      <div class="verified-heading">
-        <span class="verified-icon">✓</span>
-        PARTICIPANT VERIFIED
-      </div>
-
-      <div id="participantDetails"></div>
-
-    </div>
-
-    <button
-      id="confirmBtn"
-      class="button confirm-button"
-      onclick="confirmEntry()">
-      ✓ CONFIRM ENTRY
-    </button>
-
-    <button
-      class="button light"
-      onclick="resetScan()">
-      CANCEL / SCAN NEXT
-    </button>
-
-  </section>
-
-
-  <!-- RECENT CHECKINS -->
-
-  <section class="card">
-
-    <div class="history-header">
-
-      <div class="section-heading">
-
-        <div class="section-icon">◷</div>
-
-        <div>
-          <h3>Recent Check-ins</h3>
-          <p>Confirmed participant entries</p>
+        <div class="camera-placeholder" id="cameraPlaceholder">
+          <div class="camera-icon">▦</div>
+          <strong>Ready to scan</strong>
+          <p>Select an event and tap Start Scanner to begin.</p>
         </div>
-
       </div>
 
-      <button class="refresh-button" onclick="loadHistory()">
-        ↻ REFRESH
+      <button class="button primary" id="startBtn" disabled>
+        Start Scanner
       </button>
 
-    </div>
+      <button class="button secondary hidden" id="stopBtn">
+        Stop Camera
+      </button>
+    </section>
 
-    <div id="history" class="history-list">
-
-      <div class="empty-history">
-        Waiting for check-in history...
+    <section class="panel participant-card hidden" id="participantCard">
+      <div class="verified-heading">
+        <div class="verified-icon">✓</div>
+        <div>Participant Verified</div>
       </div>
 
+      <div class="participant-name" id="participantName">-</div>
+
+      <div class="detail">
+        <div class="detail-label">Organization</div>
+        <div class="detail-value" id="participantOrganization">-</div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Designation</div>
+        <div class="detail-value" id="participantDesignation">-</div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Mobile</div>
+        <div class="detail-value" id="participantMobile">-</div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Email</div>
+        <div class="detail-value" id="participantEmail">-</div>
+      </div>
+
+      <div class="action-row">
+        <button class="button success" id="confirmBtn">
+          Confirm Check-in
+        </button>
+        <button class="button danger" id="cancelBtn">
+          Cancel
+        </button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">Recent Check-ins</div>
+      <div id="historyList">
+        <div class="empty-history">No check-ins loaded</div>
+      </div>
+    </section>
+
+    <div class="notice" id="message">
+      Connect to the event management application to begin.
     </div>
 
-  </section>
-
-
-  <footer>
-    NORMS MANAGEMENT · SECURE EVENT ENTRY SYSTEM
-  </footer>
-
-</main>
-
+  </main>
+</div>
 
 <script>
-"use strict";
-
-
-/* =====================================================
-   1. GLOBAL VARIABLES
-===================================================== */
+/* =========================================================
+   NORMS EXTERNAL SCANNER
+   Existing parent communication protocol retained
+========================================================= */
 
 let scanner = null;
 let scannerRunning = false;
 let busy = false;
-
 let connected = false;
 let eventsLoaded = false;
 
 let currentEvent = "";
 let currentPass = null;
-let currentQrToken = "";
+let currentQrToken = null;
+let activeValidationToken = null;
+let cancelledTokens = new Set();
 
-let externalParentOrigin = null;
+let externalParentOrigin = "";
+let parentNonce = "";
+let lastScannedText = "";
+let lastScannedAt = 0;
 
 const params = new URLSearchParams(window.location.search);
+parentNonce = params.get("n") || "";
+externalParentOrigin = params.get("p") || "";
 
-const nonce = params.get("n");
-const parentOriginParameter = params.get("p");
-
-const eventSelect = document.getElementById("eventSelect");
-
-
-/* =====================================================
-   2. UI HELPERS
-===================================================== */
-
-function setStatus(message, type = "") {
-
-  const element = document.getElementById("scanStatus");
-
-  element.className = "status" + (type ? " " + type : "");
-
-  const icon = document.createElement("span");
-  icon.className = "status-icon";
-
-  if (type === "success-status" || type === "success") {
-    icon.textContent = "✓";
-  } else if (type === "error") {
-    icon.textContent = "!";
-  } else {
-    icon.textContent = "ℹ";
-  }
-
-  const text = document.createElement("span");
-  text.textContent = message;
-
-  element.replaceChildren(icon, text);
-
-}
+const $ = id => document.getElementById(id);
 
 
-function setConnection(message, type = "") {
-
-  const element = document.getElementById("connectionStatus");
-
-  element.className = "status" +
-    (type === "success" ? " success-status" :
-     type === "error" ? " error" :
-     type === "warning" ? " warning" : "");
-
-  const icon = document.createElement("span");
-  icon.className = "status-icon";
-  icon.textContent = "◉";
-
-  const text = document.createElement("span");
-  text.textContent = message;
-
-  element.replaceChildren(icon, text);
-
-  const dot = document.getElementById("headerDot");
-  const headerText = document.getElementById("headerConnection");
-
-  dot.className = "dot" + (type === "success" ? " connected" : "");
-
-  headerText.textContent =
-    type === "success" ? "Connected" :
-    type === "error" ? "Disconnected" :
-    "Connecting";
-
-}
-
-
-function showParticipantCard(show) {
-
-  document.getElementById("participantCard")
-    .classList.toggle("hidden", !show);
-
-}
-
-
-function safeText(value) {
-
-  if (value === undefined || value === null || value === "") {
-    return "-";
-  }
-
-  return String(value);
-
-}
-
-
-/* =====================================================
-   3. VALIDATE PARENT ORIGIN
-===================================================== */
+/* =========================================================
+   CONNECTION VALIDATION
+========================================================= */
 
 function validateParentOrigin() {
-
   if (!window.opener) {
-
-    setConnection(
-      "Please open this scanner from the authenticated Google Apps Script application.",
-      "error"
-    );
-
-    setStatus(
-      "Scanner must be launched from the event management application.",
-      "error"
-    );
-
+    showStatus("Parent not connected", "error");
+    showMessage("Please open the scanner from the main event management application.");
     return false;
-
   }
 
-  if (!nonce || !parentOriginParameter) {
-
-    setConnection(
-      "Scanner connection parameters are missing.",
-      "error"
-    );
-
-    setStatus(
-      "Open the scanner using the application scanner button.",
-      "error"
-    );
-
+  if (!parentNonce || !externalParentOrigin) {
+    showStatus("Invalid connection", "error");
+    showMessage("Missing secure connection details. Reopen the scanner from the main application.");
     return false;
-
   }
 
   try {
+    const url = new URL(externalParentOrigin);
 
-    const parentURL = new URL(parentOriginParameter);
+    const allowed =
+      url.protocol === "https:" &&
+      (
+        url.hostname === "script.google.com" ||
+        url.hostname.endsWith(".googleusercontent.com")
+      );
 
-    const allowedHost =
-      parentURL.hostname === "script.google.com" ||
-      parentURL.hostname.endsWith(".googleusercontent.com");
-
-    if (parentURL.protocol !== "https:" || !allowedHost) {
-
-      setConnection("Invalid Google Apps Script origin.", "error");
-
+    if (!allowed) {
+      showStatus("Invalid parent", "error");
       return false;
-
     }
 
-    externalParentOrigin = parentURL.origin;
-
+    externalParentOrigin = url.origin;
     return true;
 
   } catch (error) {
-
-    setConnection("Invalid parent application address.", "error");
-
+    showStatus("Invalid connection", "error");
     return false;
-
   }
-
 }
 
 
-/* =====================================================
-   4. SEND MESSAGE TO PARENT APPLICATION
-===================================================== */
+/* =========================================================
+   COMMUNICATION WITH PARENT APPLICATION
+========================================================= */
 
 function sendToParent(type, data = {}) {
-
-  if (!window.opener || !externalParentOrigin || !nonce) {
-
-    setConnection(
-      "Parent application connection is unavailable.",
-      "error"
-    );
-
+  if (!window.opener || !connected) {
+    showMessage("Connection to the main application is unavailable.");
     return false;
-
   }
 
-  try {
+  window.opener.postMessage({
+    app: "NORMS_EXTERNAL_SCANNER",
+    type: type,
+    nonce: parentNonce,
+    ...data
+  }, externalParentOrigin);
 
-    window.opener.postMessage({
-
-      app: "NORMS_EXTERNAL_SCANNER",
-      type: type,
-      nonce: nonce,
-      ...data
-
-    }, externalParentOrigin);
-
-    return true;
-
-  } catch (error) {
-
-    setConnection(
-      "Unable to communicate with the parent application.",
-      "error"
-    );
-
-    return false;
-
-  }
-
+  return true;
 }
 
 
-/* =====================================================
-   5. RECEIVE MESSAGES FROM GOOGLE APPS SCRIPT
-===================================================== */
+/* =========================================================
+   RECEIVE PARENT MESSAGES
+========================================================= */
 
 window.addEventListener("message", function(event) {
 
-  if (!externalParentOrigin) return;
-
   if (event.origin !== externalParentOrigin) return;
-
   if (event.source !== window.opener) return;
 
-  const data = event.data || {};
+  const data = event.data;
 
-  if (data.app !== "NORMS_EVENT_PARENT") return;
-
-  if (data.nonce !== nonce) return;
-
+  if (!data || data.app !== "NORMS_EVENT_PARENT") return;
+  if (data.nonce !== parentNonce) return;
 
   switch (data.type) {
 
     case "INIT":
-
+      connected = true;
       handleInitialization(data.events || []);
-
       break;
-
 
     case "VALIDATION_RESULT":
-
       handleValidation(data.response);
-
       break;
-
 
     case "CHECKIN_RESULT":
-
       handleCheckin(data.response);
-
       break;
-
 
     case "HISTORY_RESULT":
-
       renderHistory(data.records || []);
-
       break;
-
 
     case "PARENT_ERROR":
-
       busy = false;
-
-      setStatus(
-        data.message || "Google Apps Script returned an error.",
-        "error"
-      );
-
+      showStatus("Error", "error");
+      showMessage(data.message || "An error occurred in the main application.");
       break;
-
   }
-
 });
 
 
-/* =====================================================
-   6. INITIALIZE EVENT LIST
-===================================================== */
+/* =========================================================
+   INITIALIZATION
+========================================================= */
 
 function handleInitialization(events) {
-
   connected = true;
   eventsLoaded = true;
 
-  eventSelect.innerHTML = "";
+  showStatus("Connected", "ready");
+  showMessage("Connected to NORMS Event Management.");
 
-  if (!Array.isArray(events) || events.length === 0) {
+  const select = $("eventSelect");
+  select.innerHTML = "";
 
-    eventSelect.disabled = true;
-
-    const option = document.createElement("option");
-
-    option.value = "";
-    option.textContent = "No active events available";
-
-    eventSelect.appendChild(option);
-
-    document.getElementById("startBtn").disabled = true;
-
-    setConnection(
-      "Connected, but no active events were returned.",
-      "warning"
-    );
-
+  if (!events || events.length === 0) {
+    select.innerHTML = '<option value="">No events available</option>';
+    select.disabled = true;
+    $("startBtn").disabled = true;
     return;
-
   }
 
-  events.forEach(function(item) {
+  events.forEach(event => {
+    const id = event.eventId || event.Event_ID;
+    const name = event.eventName || event.Event_Name;
 
-    const eventId = item.eventId || item.Event_ID;
-
-    const eventName = item.eventName || item.Event_Name;
-
-    if (!eventId || !eventName) return;
+    if (!id || !name) return;
 
     const option = document.createElement("option");
-
-    option.value = String(eventId);
-    option.textContent = String(eventName);
-
-    eventSelect.appendChild(option);
-
+    option.value = id;
+    option.textContent = name;
+    select.appendChild(option);
   });
 
-  if (eventSelect.options.length === 0) {
-
-    setConnection("Event data format is invalid.", "error");
-
-    return;
-
+  if (select.options.length > 0) {
+    select.disabled = false;
+    currentEvent = select.value;
+    $("startBtn").disabled = false;
+    loadHistory();
+  } else {
+    select.innerHTML = '<option value="">No valid events found</option>';
   }
-
-  eventSelect.disabled = false;
-
-  currentEvent = eventSelect.value;
-
-  document.getElementById("startBtn").disabled = false;
-
-  setConnection(
-    "Connected to NORMS Event Management.",
-    "success"
-  );
-
-  setStatus(
-    "Event loaded. Start the camera to scan participants."
-  );
-
-  loadHistory();
-
 }
 
 
-/* =====================================================
-   7. EVENT CHANGE
-===================================================== */
+/* =========================================================
+   EVENT CHANGE
+========================================================= */
 
-eventSelect.addEventListener("change", function() {
-
+$("eventSelect").addEventListener("change", function() {
   currentEvent = this.value;
 
-  resetScan();
+  resetScannerScreen("Event changed. Ready to scan.");
 
-  loadHistory();
-
+  if (currentEvent) {
+    loadHistory();
+  }
 });
 
 
-/* =====================================================
-   8. START CAMERA
-===================================================== */
+/* =========================================================
+   CAMERA START
+========================================================= */
 
 async function startScanner() {
 
-  if (!connected || !eventsLoaded) {
-
-    setStatus(
-      "Waiting for the event management connection.",
-      "error"
-    );
-
-    return;
-
-  }
-
   if (!currentEvent) {
-
-    setStatus("Please select an event first.", "error");
-
+    showMessage("Please select an event first.");
     return;
-
   }
 
   if (scannerRunning) return;
 
   if (typeof Html5Qrcode === "undefined") {
-
-    setStatus(
-      "QR scanner library could not be loaded. Check internet connection.",
-      "error"
-    );
-
+    showMessage("QR scanner library could not be loaded. Check your internet connection.");
     return;
-
   }
 
+  $("startBtn").disabled = true;
+  showMessage("Starting camera...");
+
   try {
+    scanner = new Html5Qrcode("reader");
 
-    if (!scanner) {
-
-      scanner = new Html5Qrcode("reader");
-
-    }
-
-    document.getElementById("startBtn").disabled = true;
+    const qrboxSize = Math.min(
+      260,
+      Math.floor(Math.min(window.innerWidth - 70, 300))
+    );
 
     await scanner.start(
-
       { facingMode: "environment" },
-
       {
-
         fps: 10,
-
-        qrbox: function(viewfinderWidth, viewfinderHeight) {
-
-          const size = Math.floor(
-            Math.min(viewfinderWidth, viewfinderHeight) * 0.70
-          );
-
-          return {
-            width: Math.min(size, 280),
-            height: Math.min(size, 280)
-          };
-
+        qrbox: {
+          width: qrboxSize,
+          height: qrboxSize
         },
-
         aspectRatio: 1
-
       },
-
       onScanSuccess,
-
       function() {}
-
     );
 
     scannerRunning = true;
 
-    document.getElementById("startBtn").disabled = true;
+    $("cameraPlaceholder").classList.add("hidden");
+    $("startBtn").classList.add("hidden");
+    $("stopBtn").classList.remove("hidden");
 
-    document.getElementById("stopBtn").disabled = false;
-
-    document.getElementById("cameraPlaceholder")
-      .classList.add("hidden");
-
-    setStatus(
-      "Camera active. Position the participant QR code inside the scanning area."
-    );
+    $("cameraStatus").textContent = "Camera active";
+    showStatus("Ready to scan", "ready");
+    showMessage("Point the camera towards the participant's QR code.");
 
   } catch (error) {
 
-    document.getElementById("startBtn").disabled = false;
+    scannerRunning = false;
+    $("startBtn").disabled = false;
+    $("startBtn").classList.remove("hidden");
 
-    setStatus(
-      "Camera access failed. Allow camera permission and use HTTPS. " +
-      String(error),
-      "error"
-    );
-
+    showStatus("Camera error", "error");
+    showMessage("Unable to start camera: " + error);
   }
-
 }
 
 
-/* =====================================================
-   9. STOP CAMERA
-===================================================== */
+$("startBtn").addEventListener("click", startScanner);
+
+
+/* =========================================================
+   CAMERA STOP
+========================================================= */
 
 async function stopScanner() {
 
-  if (!scanner || !scannerRunning) return;
-
-  try {
-
-    await scanner.stop();
-
-    scannerRunning = false;
-
-    document.getElementById("startBtn").disabled = false;
-
-    document.getElementById("stopBtn").disabled = true;
-
-    document.getElementById("cameraPlaceholder")
-      .classList.remove("hidden");
-
-    setStatus("Camera stopped.");
-
-  } catch (error) {
-
-    setStatus(
-      "Unable to stop camera: " + String(error),
-      "error"
-    );
-
+  if (scanner && scannerRunning) {
+    try {
+      await scanner.stop();
+      await scanner.clear();
+    } catch (error) {
+      console.warn("Camera stop:", error);
+    }
   }
 
+  scannerRunning = false;
+  scanner = null;
+
+  $("cameraPlaceholder").classList.remove("hidden");
+  $("startBtn").classList.remove("hidden");
+  $("startBtn").disabled = !currentEvent;
+  $("stopBtn").classList.add("hidden");
+
+  $("cameraStatus").textContent = "Camera stopped";
+
+  resetScannerScreen("Camera stopped.");
 }
 
+$("stopBtn").addEventListener("click", stopScanner);
 
-/* =====================================================
-   10. EXTRACT QR TOKEN
-===================================================== */
 
-function extractToken(value) {
+/* =========================================================
+   QR CODE EXTRACTION
+========================================================= */
 
-  const text = String(value || "").trim();
-
+function extractQrToken(text) {
   try {
-
     const url = new URL(text);
+    const token = url.searchParams.get("token");
 
-    return url.searchParams.get("token") || text;
+    if (token) return token;
 
-  } catch (error) {
+  } catch (error) {}
 
-    return text;
-
-  }
-
+  return String(text || "").trim();
 }
 
 
-/* =====================================================
-   11. PROCESS SCANNED QR CODE
-===================================================== */
+/* =========================================================
+   QR SCAN SUCCESS
+========================================================= */
 
 function onScanSuccess(decodedText) {
 
-  if (busy || currentPass) return;
+  if (busy || !scannerRunning) return;
 
-  if (!currentEvent) {
+  const now = Date.now();
 
-    setStatus("Please select an event.", "error");
-
+  // Avoid repeated camera callbacks for the same QR code
+  if (
+    decodedText === lastScannedText &&
+    now - lastScannedAt < 2000
+  ) {
     return;
-
   }
 
-  const qrToken = extractToken(decodedText);
+  lastScannedText = decodedText;
+  lastScannedAt = now;
+
+  const qrToken = extractQrToken(decodedText);
 
   if (!qrToken) {
-
-    setStatus(
-      "QR code does not contain a valid token.",
-      "error"
-    );
-
+    showStatus("Invalid QR", "error");
+    showMessage("Could not read a valid QR token.");
     return;
-
   }
 
   busy = true;
-
+  currentPass = null;
   currentQrToken = qrToken;
+  activeValidationToken = qrToken;
 
-  setStatus("QR detected. Verifying participant...");
+  cancelledTokens.delete(qrToken);
+
+  $("participantCard").classList.add("hidden");
+
+  showStatus("Verifying...", "");
+  showMessage("Verifying participant...");
 
   const sent = sendToParent("VALIDATE_QR", {
-
     eventId: currentEvent,
-
     qrToken: qrToken
-
   });
 
   if (!sent) {
-
     busy = false;
-
+    activeValidationToken = null;
+    showStatus("Connection error", "error");
+    showMessage("Unable to send QR verification request.");
   }
-
 }
 
 
-/* =====================================================
-   12. PARTICIPANT VALIDATION RESULT
-===================================================== */
+/* =========================================================
+   VALIDATION RESPONSE
+========================================================= */
 
 function handleValidation(response) {
+
+  const responsePass = response?.pass || response || {};
+  const responseToken =
+    responsePass.qrToken ||
+    responsePass.QR_Token ||
+    response?.qrToken ||
+    activeValidationToken;
+
+  // Ignore a response belonging to a cancelled/old scan
+  if (
+    !busy ||
+    !currentQrToken ||
+    !activeValidationToken ||
+    responseToken !== activeValidationToken ||
+    cancelledTokens.has(activeValidationToken)
+  ) {
+    return;
+  }
+
+  busy = false;
+
+  if (!response || response.success !== true) {
+    showStatus("Not verified", "error");
+    showMessage(response?.message || "Participant verification failed.");
+    resetScannerScreen("Ready to scan next QR code");
+    return;
+  }
+
+  const participant = response.participant || {};
+  const pass = response.pass || response;
+
+  const passId =
+    pass.passId ||
+    pass.Pass_ID ||
+    response.passId ||
+    participant.passId ||
+    participant.Pass_ID;
+
+  const qrToken =
+    pass.qrToken ||
+    pass.QR_Token ||
+    response.qrToken ||
+    currentQrToken;
+
+  if (!passId) {
+    showStatus("Invalid pass", "error");
+    showMessage("Verified response did not contain a valid pass ID.");
+    resetScannerScreen("Ready to scan next QR code");
+    return;
+  }
+
+  currentPass = {
+    passId: passId,
+    qrToken: qrToken,
+    participant: participant
+  };
+
+  currentQrToken = qrToken;
+
+  $("participantName").textContent =
+    participant.name || participant.Name || "-";
+
+  $("participantOrganization").textContent =
+    participant.organization || participant.Organization || "-";
+
+  $("participantDesignation").textContent =
+    participant.designation || participant.Designation || "-";
+
+  $("participantMobile").textContent =
+    participant.mobile || participant.Mobile || "-";
+
+  $("participantEmail").textContent =
+    participant.email || participant.Email || "-";
+
+  $("participantCard").classList.remove("hidden");
+
+  showStatus("Verified", "ready");
+  showMessage("Participant verified. Confirm check-in or cancel.");
+}
+
+
+/* =========================================================
+   CONFIRM CHECK-IN
+========================================================= */
+
+$("confirmBtn").addEventListener("click", function() {
+
+  if (!currentPass || busy) return;
+
+  busy = true;
+
+  $("confirmBtn").disabled = true;
+  $("cancelBtn").disabled = true;
+
+  showStatus("Checking in...", "");
+  showMessage("Processing participant check-in...");
+
+  const sent = sendToParent("CONFIRM_CHECKIN", {
+    eventId: currentEvent,
+    passId: currentPass.passId,
+    qrToken: currentPass.qrToken,
+    deviceInfo: navigator.userAgent
+  });
+
+  if (!sent) {
+    busy = false;
+    $("confirmBtn").disabled = false;
+    $("cancelBtn").disabled = false;
+
+    showStatus("Connection error", "error");
+    showMessage("Unable to send check-in request.");
+  }
+});
+
+
+/* =========================================================
+   CHECK-IN RESPONSE
+========================================================= */
+
+function handleCheckin(response) {
+
+  if (!currentPass) return;
 
   busy = false;
 
   if (!response || response.success !== true) {
 
-    currentPass = null;
+    showStatus("Check-in failed", "error");
+    showMessage(response?.message || "Check-in could not be completed.");
 
-    currentQrToken = "";
-
-    showParticipantCard(false);
-
-    setStatus(
-      response && response.message
-        ? response.message
-        : "Invalid or unrecognized QR pass.",
-      "error"
-    );
+    $("confirmBtn").disabled = false;
+    $("cancelBtn").disabled = false;
 
     return;
-
   }
 
-  const participant = response.participant || {};
+  // Successful check-in: clear participant and keep camera running
+  resetScannerScreen("Check-in successful. Ready for next scan.");
 
-  const pass = response.pass || response;
+  loadHistory();
 
-  currentPass = {
+  showStatus("Success", "success-status");
+  showMessage("Check-in successful. Scan the next participant's QR code.");
 
-    passId:
-      pass.passId ||
-      pass.Pass_ID ||
-      response.passId ||
-      participant.passId ||
-      participant.Pass_ID ||
-      "",
-
-    qrToken:
-      pass.qrToken ||
-      pass.QR_Token ||
-      response.qrToken ||
-      currentQrToken
-
-  };
-
-  if (!currentPass.passId) {
-
-    showParticipantCard(false);
-
-    setStatus(
-      "Participant was returned, but Pass ID is missing in the validation response.",
-      "error"
-    );
-
-    currentPass = null;
-
-    return;
-
-  }
-
-  renderParticipant(participant, currentPass);
-
-  showParticipantCard(true);
-
-  document.getElementById("confirmBtn").disabled = false;
-
-  setStatus(
-    "Participant verified successfully. Confirm entry.",
-    "success-status"
-  );
-
-  document.getElementById("participantCard")
-    .scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
-
+  // Return to ready status after showing success
+  setTimeout(function() {
+    if (scannerRunning && !currentPass && !busy) {
+      showStatus("Ready to scan", "ready");
+      showMessage("Ready for the next participant.");
+    }
+  }, 2000);
 }
 
 
-/* =====================================================
-   13. DISPLAY PARTICIPANT DETAILS
-===================================================== */
+/* =========================================================
+   CANCEL VERIFICATION
+========================================================= */
 
-function renderParticipant(participant, pass) {
+$("cancelBtn").addEventListener("click", cancelVerification);
 
-  const container = document.getElementById("participantDetails");
+function cancelVerification() {
 
-  container.innerHTML = "";
+  if (currentQrToken) {
+    cancelledTokens.add(currentQrToken);
+  }
 
-  const fields = [
+  // Invalidate the previous verification request
+  activeValidationToken = null;
 
-    ["Name", participant.name || participant.Name],
-
-    ["Organization", participant.organization || participant.Organization],
-
-    ["Designation", participant.designation || participant.Designation],
-
-    ["Mobile", participant.mobile || participant.Mobile],
-
-    ["Email", participant.email || participant.Email],
-
-    ["Pass ID", pass.passId]
-
-  ];
-
-  fields.forEach(function(field) {
-
-    const row = document.createElement("div");
-
-    row.className = "participant-row";
-
-    const label = document.createElement("span");
-
-    label.textContent = field[0];
-
-    const value = document.createElement("strong");
-
-    value.textContent = safeText(field[1]);
-
-    row.appendChild(label);
-
-    row.appendChild(value);
-
-    container.appendChild(row);
-
-  });
-
+  resetScannerScreen("Verification cancelled. Ready for next scan.");
 }
 
 
-/* =====================================================
-   14. CONFIRM ENTRY
-===================================================== */
+/* =========================================================
+   COMMON SCREEN RESET
+========================================================= */
 
-function confirmEntry() {
-
-  if (!currentPass || !currentEvent || !currentQrToken) {
-
-    setStatus(
-      "Participant or QR token information is missing.",
-      "error"
-    );
-
-    return;
-
-  }
-
-  if (busy) return;
-
-  busy = true;
-
-  document.getElementById("confirmBtn").disabled = true;
-
-  setStatus("Confirming participant entry...");
-
-  const sent = sendToParent("CONFIRM_CHECKIN", {
-
-    eventId: currentEvent,
-
-    passId: currentPass.passId,
-
-    qrToken: currentQrToken,
-
-    deviceInfo: navigator.userAgent
-
-  });
-
-  if (!sent) {
-
-    busy = false;
-
-    document.getElementById("confirmBtn").disabled = false;
-
-  }
-
-}
-
-
-/* =====================================================
-   15. CHECK-IN RESULT
-===================================================== */
-
-function handleCheckin(response) {
+function resetScannerScreen(message = "Ready to scan next QR code") {
 
   busy = false;
-
-  if (response && response.success === true) {
-
-    setStatus(
-      response.message || "Participant entry confirmed successfully.",
-      "success-status"
-    );
-
-    currentPass = null;
-
-    currentQrToken = "";
-
-    showParticipantCard(false);
-
-    loadHistory();
-
-    // Keep camera running for the next participant.
-
-    return;
-
-  }
-
-  setStatus(
-    response && response.message
-      ? response.message
-      : "Check-in could not be completed.",
-    "error"
-  );
-
-  document.getElementById("confirmBtn").disabled = false;
-
-}
-
-
-/* =====================================================
-   16. RESET PARTICIPANT
-===================================================== */
-
-function resetScan() {
-
   currentPass = null;
+  currentQrToken = null;
 
-  currentQrToken = "";
+  $("participantCard").classList.add("hidden");
 
-  busy = false;
+  $("confirmBtn").disabled = false;
+  $("cancelBtn").disabled = false;
 
-  showParticipantCard(false);
+  if (scannerRunning) {
+    showStatus("Ready to scan", "ready");
+    $("cameraStatus").textContent = "Camera active";
+  } else {
+    showStatus("Camera stopped", "");
+  }
 
-  document.getElementById("confirmBtn").disabled = false;
-
-  setStatus("Ready to scan the next participant.");
-
+  showMessage(message);
 }
 
 
-/* =====================================================
-   17. LOAD RECENT CHECK-INS
-===================================================== */
+/* =========================================================
+   LOAD CHECK-IN HISTORY
+========================================================= */
 
 function loadHistory() {
 
-  if (!connected || !currentEvent) return;
+  if (!currentEvent || !connected) return;
 
   sendToParent("LOAD_HISTORY", {
-
     eventId: currentEvent
-
   });
-
 }
 
 
-/* =====================================================
-   18. DISPLAY RECENT CHECK-INS
-===================================================== */
+/* =========================================================
+   DISPLAY HISTORY
+========================================================= */
 
 function renderHistory(records) {
 
-  const container = document.getElementById("history");
-
+  const container = $("historyList");
   container.innerHTML = "";
 
-  if (!Array.isArray(records) || records.length === 0) {
-
-    const message = document.createElement("div");
-
-    message.className = "empty-history";
-
-    message.textContent = "No check-in records found.";
-
-    container.appendChild(message);
-
+  if (!records || records.length === 0) {
+    container.innerHTML =
+      '<div class="empty-history">No check-ins yet</div>';
     return;
-
   }
 
-  records.forEach(function(item) {
+  records.slice(0, 10).forEach(record => {
 
-    const row = document.createElement("div");
+    const name = record.name || record.Name || "Participant";
+    const organization =
+      record.organization || record.Organization || "";
 
-    row.className = "history-item";
+    const time =
+      record.time ||
+      record.Time ||
+      record.checkInTime ||
+      "";
 
-    const nameText = safeText(item.name || item.Name);
+    const item = document.createElement("div");
+    item.className = "history-item";
 
-    const avatar = document.createElement("div");
+    const nameElement = document.createElement("div");
+    nameElement.className = "history-name";
+    nameElement.textContent = name;
 
-    avatar.className = "history-avatar";
+    const metaElement = document.createElement("div");
+    metaElement.className = "history-meta";
+    metaElement.textContent =
+      [organization, time].filter(Boolean).join(" • ");
 
-    avatar.textContent = nameText.charAt(0).toUpperCase();
+    item.appendChild(nameElement);
+    item.appendChild(metaElement);
 
-    const info = document.createElement("div");
+    container.appendChild(item);
+  });
+}
 
-    info.className = "history-info";
 
-    const name = document.createElement("div");
+/* =========================================================
+   STATUS AND MESSAGE HELPERS
+========================================================= */
 
-    name.className = "history-name";
+function showStatus(message, className = "") {
+  const status = $("connectionStatus");
 
-    name.textContent = nameText;
+  status.textContent = message;
+  status.className = "status";
 
-    const details = document.createElement("div");
+  if (className) {
+    status.classList.add(className);
+  }
+}
 
-    details.className = "history-meta";
+function showMessage(message) {
+  $("message").textContent = message;
+}
 
-    details.textContent = [
 
-      item.organization || item.Organization || "",
+/* =========================================================
+   INITIAL CONNECTION
+========================================================= */
 
-      item.time || item.Time || item.checkInTime || ""
+if (validateParentOrigin()) {
 
-    ].filter(Boolean).join(" | ");
+  connected = true;
 
-    const badge = document.createElement("div");
+  showStatus("Connecting...", "");
 
-    badge.className = "history-badge";
-
-    badge.textContent = "CHECKED IN";
-
-    info.appendChild(name);
-
-    info.appendChild(details);
-
-    row.appendChild(avatar);
-
-    row.appendChild(info);
-
-    row.appendChild(badge);
-
-    container.appendChild(row);
-
+  sendToParent("SCANNER_READY", {
+    appVersion: "2.0"
   });
 
+} else {
+
+  connected = false;
+  $("startBtn").disabled = true;
 }
 
 
-/* =====================================================
-   19. INITIALIZE SCANNER CONNECTION
-===================================================== */
+/* =========================================================
+   CLEANUP
+========================================================= */
 
-function initializeConnection() {
-
-  if (!validateParentOrigin()) return;
-
-  setConnection("Connecting to Google Apps Script...");
-
-  sendToParent("SCANNER_READY");
-
-}
-
-
-/* =====================================================
-   20. START
-===================================================== */
-
-initializeConnection();
+window.addEventListener("beforeunload", function() {
+  if (scanner && scannerRunning) {
+    scanner.stop().catch(function() {});
+  }
+});
 
 </script>
-
 </body>
 </html>
