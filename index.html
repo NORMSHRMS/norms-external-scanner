@@ -3,138 +3,157 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101b35">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101d35">
 <title>NORMS QR Scanner</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <style>
 :root {
-  --navy: #101b35;
-  --navy2: #192849;
+  --navy: #101d35;
   --blue: #2563eb;
   --green: #16a34a;
   --red: #dc2626;
-  --orange: #d97706;
-  --white: #ffffff;
+  --light: #f3f6fb;
+  --text: #172033;
   --muted: #64748b;
-  --border: #e2e8f0;
-  --bg: #f1f5f9;
 }
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--light);
+  color: var(--text);
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: #172033;
-  font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.app {
+  width: 100%;
+  max-width: 600px;
+  min-height: 100vh;
+  margin: auto;
+  background: var(--light);
 }
 
 .header {
   background: var(--navy);
   color: white;
-  padding: 19px 16px;
-  text-align: center;
+  padding: calc(18px + env(safe-area-inset-top)) 18px 20px;
+  border-radius: 0 0 22px 22px;
 }
 
-.header h1 {
-  margin: 0;
-  font-size: 21px;
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  font-size: 19px;
+  font-weight: 800;
   letter-spacing: 1px;
 }
 
-.header p {
-  margin: 6px 0 0;
-  color: #cbd5e1;
+.subtitle {
   font-size: 12px;
+  color: #cbd5e1;
+  margin-top: 5px;
 }
 
-.container {
-  width: 100%;
-  max-width: 520px;
-  margin: auto;
-  padding: 15px;
+.status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 11px;
+  border-radius: 20px;
+  background: #475569;
+  color: white;
+  text-align: center;
+}
+
+.status.ready,
+.status.success-status {
+  background: #15803d;
+}
+
+.status.error {
+  background: #991b1b;
+}
+
+.content {
+  padding: 16px;
 }
 
 .panel {
   background: white;
-  border-radius: 15px;
+  border-radius: 17px;
   padding: 16px;
-  margin-bottom: 14px;
-  box-shadow: 0 3px 12px rgba(15, 23, 42, .06);
+  margin-bottom: 15px;
+  box-shadow: 0 3px 14px rgba(15, 23, 42, .06);
 }
 
-.section-title {
+.panel-title {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 12px;
-  color: var(--navy);
 }
 
 label {
   display: block;
   font-size: 12px;
   font-weight: 700;
+  color: var(--muted);
   margin-bottom: 7px;
-  color: #475569;
 }
 
 select {
   width: 100%;
-  padding: 13px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
+  min-height: 48px;
+  border: 1px solid #dbe2ea;
+  border-radius: 11px;
+  padding: 0 12px;
   background: white;
   font-size: 15px;
-  outline: none;
+  color: var(--text);
 }
 
-.status {
+.camera-panel {
+  padding: 12px;
+}
+
+.camera-heading {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 11px 13px;
-  border-radius: 9px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  font-size: 13px;
-  font-weight: 700;
-  margin-top: 13px;
+  justify-content: space-between;
+  margin: 3px 3px 12px;
 }
 
-.status.ready {
-  background: #ecfdf5;
-  color: #15803d;
+.camera-heading strong {
+  font-size: 15px;
 }
 
-.status.error {
-  background: #fef2f2;
-  color: #b91c1c;
+.camera-heading span {
+  font-size: 11px;
+  color: var(--muted);
 }
 
-.status.warning {
-  background: #fffbeb;
-  color: #b45309;
-}
-
-.status-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: currentColor;
-  flex-shrink: 0;
-}
-
-.camera-area {
-  background: #0b1220;
-  border-radius: 14px;
-  overflow: hidden;
+.camera-box {
   position: relative;
+  width: 100%;
   min-height: 260px;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #0b1220;
 }
 
 #reader {
@@ -146,26 +165,27 @@ select {
 #reader video {
   width: 100% !important;
   object-fit: cover !important;
-  border-radius: 12px;
+  border-radius: 15px;
 }
 
-#reader__dashboard {
+#reader__dashboard,
+#reader__status_span,
+#reader__header_message {
   display: none !important;
 }
 
-#reader__scan_region {
-  min-height: 260px;
-}
-
 .camera-placeholder {
-  min-height: 260px;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
+  flex-direction: column;
   text-align: center;
   padding: 20px;
+  color: white;
+  background: #0b1220;
 }
 
 .camera-placeholder .camera-icon {
@@ -177,599 +197,537 @@ select {
   font-size: 16px;
 }
 
-.camera-placeholder span {
+.camera-placeholder p {
+  color: #aebbd0;
   font-size: 12px;
-  color: #cbd5e1;
-  margin-top: 7px;
   line-height: 1.5;
 }
 
+.camera-placeholder.hidden,
 .hidden {
   display: none !important;
 }
 
-button {
-  border: 0;
-  border-radius: 10px;
-  padding: 14px 16px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
+.button {
   width: 100%;
+  border: none;
+  border-radius: 12px;
+  min-height: 49px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
   margin-top: 10px;
 }
 
-button:disabled {
-  opacity: .55;
+.button:disabled {
+  opacity: .5;
   cursor: not-allowed;
 }
 
-.btn-primary {
+.primary {
   background: var(--blue);
   color: white;
 }
 
-.btn-success {
+.success {
   background: var(--green);
   color: white;
 }
 
-.btn-danger {
-  background: var(--red);
-  color: white;
+.danger {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
-.btn-secondary {
-  background: #e2e8f0;
-  color: #1e293b;
-}
-
-.button-row {
-  display: flex;
-  gap: 10px;
-}
-
-.button-row button {
-  flex: 1;
+.secondary {
+  background: #e8edf5;
+  color: #263449;
 }
 
 .participant-card {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
+  border: 1px solid #bbf7d0;
+  background: white;
 }
 
-.participant-heading {
-  background: #eff6ff;
-  padding: 13px;
-  color: #1d4ed8;
-  font-size: 14px;
-  font-weight: 700;
+.verified-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #166534;
+  font-weight: 800;
+  margin-bottom: 14px;
 }
 
-.participant-body {
-  padding: 14px;
+.verified-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #dcfce7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 }
 
 .participant-name {
   font-size: 20px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 13px;
+  font-weight: 800;
+  margin-bottom: 14px;
   overflow-wrap: anywhere;
 }
 
-.detail-row {
-  display: flex;
-  padding: 9px 0;
-  border-bottom: 1px solid #f1f5f9;
-  gap: 10px;
-  font-size: 13px;
+.detail {
+  padding: 10px 0;
+  border-bottom: 1px solid #edf0f4;
 }
 
-.detail-row:last-child {
-  border-bottom: 0;
+.detail:last-child {
+  border-bottom: none;
 }
 
 .detail-label {
-  width: 95px;
-  flex-shrink: 0;
+  font-size: 11px;
   color: var(--muted);
-  font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .detail-value {
-  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
   overflow-wrap: anywhere;
 }
 
-.message-box {
-  font-size: 13px;
-  padding: 12px;
-  border-radius: 9px;
+.action-row {
+  display: flex;
+  gap: 10px;
   margin-top: 12px;
-  line-height: 1.5;
-  background: #f1f5f9;
-  color: #334155;
-  overflow-wrap: anywhere;
+}
+
+.action-row .button {
+  flex: 1;
+  margin-top: 0;
 }
 
 .history-item {
   padding: 11px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
+  border-bottom: 1px solid #edf0f4;
 }
 
 .history-item:last-child {
-  border-bottom: 0;
+  border-bottom: none;
 }
 
 .history-name {
+  font-size: 13px;
   font-weight: 700;
-  color: var(--navy);
 }
 
 .history-meta {
+  font-size: 11px;
   color: var(--muted);
-  font-size: 12px;
   margin-top: 4px;
 }
 
 .empty-history {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
   text-align: center;
-  padding: 15px 0;
+  padding: 15px 5px;
 }
 
-.footer {
+.notice {
+  font-size: 12px;
+  color: var(--muted);
   text-align: center;
-  color: #94a3b8;
-  font-size: 11px;
-  padding: 10px 0 20px;
+  line-height: 1.5;
+  padding: 5px 10px 15px;
 }
 
-.spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #bfdbfe;
-  border-top-color: #2563eb;
-  border-radius: 50%;
-  display: inline-block;
-  animation: spin .7s linear infinite;
-}
+@media (max-width: 380px) {
+  .content {
+    padding: 11px;
+  }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  .header {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .brand {
+    font-size: 17px;
+  }
+
+  .camera-box,
+  #reader {
+    min-height: 230px;
+  }
+
+  .participant-name {
+    font-size: 18px;
+  }
 }
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<div class="header">
-  <h1>NORMS MANAGEMENT</h1>
-  <p>EVENT QR ENTRY SCANNER</p>
-</div>
-
-<div class="container">
-
-  <div class="panel">
-    <div class="section-title">Event Selection</div>
-
-    <label for="eventSelect">Select Event</label>
-    <select id="eventSelect" disabled>
-      <option value="">Waiting for event data...</option>
-    </select>
-
-    <div id="connectionStatus" class="status warning">
-      <span class="status-dot"></span>
-      <span id="connectionText">Connecting to event system...</span>
+  <header class="header">
+    <div class="header-row">
+      <div>
+        <div class="brand">NORMS MANAGEMENT</div>
+        <div class="subtitle">Event QR Entry Scanner</div>
+      </div>
+      <div class="status" id="connectionStatus">Connecting...</div>
     </div>
-  </div>
+  </header>
 
-  <div class="panel">
-    <div class="section-title">QR Code Scanner</div>
+  <main class="content">
 
-    <div class="camera-area">
-      <div id="cameraPlaceholder" class="camera-placeholder">
-        <div class="camera-icon">📷</div>
-        <strong>Camera is stopped</strong>
-        <span>Select an event and tap Start Scanner</span>
+    <section class="panel">
+      <div class="panel-title">Event Selection</div>
+      <label for="eventSelect">Select Event</label>
+      <select id="eventSelect" disabled>
+        <option value="">Loading events...</option>
+      </select>
+    </section>
+
+    <section class="panel camera-panel">
+      <div class="camera-heading">
+        <strong>QR Code Scanner</strong>
+        <span id="cameraStatus">Camera not started</span>
       </div>
 
-      <div id="reader"></div>
-    </div>
+      <div class="camera-box">
+        <div id="reader"></div>
 
-    <div id="cameraStatus" class="status warning">
-      <span class="status-dot"></span>
-      <span>Camera stopped</span>
-    </div>
-
-    <button id="startBtn" class="btn-primary" disabled>
-      Start Scanner
-    </button>
-
-    <button id="stopBtn" class="btn-secondary hidden">
-      Stop Camera
-    </button>
-
-    <div id="mainMessage" class="message-box">
-      Select an event to begin scanning.
-    </div>
-  </div>
-
-  <div id="participantPanel" class="panel hidden">
-    <div class="section-title">Participant Verification</div>
-
-    <div class="participant-card">
-      <div class="participant-heading" id="verificationHeading">
-        Participant Verified
-      </div>
-
-      <div class="participant-body">
-        <div class="participant-name" id="participantName">-</div>
-
-        <div class="detail-row">
-          <div class="detail-label">Organization</div>
-          <div class="detail-value" id="participantOrganization">-</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Designation</div>
-          <div class="detail-value" id="participantDesignation">-</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Mobile</div>
-          <div class="detail-value" id="participantMobile">-</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Email</div>
-          <div class="detail-value" id="participantEmail">-</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Pass ID</div>
-          <div class="detail-value" id="participantPassId">-</div>
+        <div class="camera-placeholder" id="cameraPlaceholder">
+          <div class="camera-icon">▦</div>
+          <strong>Ready to scan</strong>
+          <p>Select an event and tap Start Scanner to begin.</p>
         </div>
       </div>
-    </div>
 
-    <div id="participantMessage" class="message-box">
-      Please confirm check-in.
-    </div>
-
-    <div class="button-row">
-      <button id="confirmBtn" class="btn-success">
-        Confirm Check-in
+      <button class="button primary" id="startBtn" disabled>
+        Start Scanner
       </button>
 
-      <button id="cancelBtn" class="btn-danger">
-        Cancel
+      <button class="button secondary hidden" id="stopBtn">
+        Stop Camera
       </button>
+    </section>
+
+    <section class="panel participant-card hidden" id="participantCard">
+      <div class="verified-heading">
+        <div class="verified-icon">✓</div>
+        <div>Participant Verified</div>
+      </div>
+
+      <div class="participant-name" id="participantName">-</div>
+
+      <div class="detail">
+        <div class="detail-label">Organization</div>
+        <div class="detail-value" id="participantOrganization">-</div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Designation</div>
+        <div class="detail-value" id="participantDesignation">-</div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Mobile</div>
+        <div class="detail-value" id="participantMobile">-</div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Email</div>
+        <div class="detail-value" id="participantEmail">-</div>
+      </div>
+
+      <div class="action-row">
+        <button class="button success" id="confirmBtn">
+          Confirm Check-in
+        </button>
+        <button class="button danger" id="cancelBtn">
+          Cancel
+        </button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">Recent Check-ins</div>
+      <div id="historyList">
+        <div class="empty-history">No check-ins loaded</div>
+      </div>
+    </section>
+
+    <div class="notice" id="message">
+      Connect to the event management application to begin.
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="section-title">Recent Check-ins</div>
-
-    <div id="historyList">
-      <div class="empty-history">No check-in history loaded.</div>
-    </div>
-
-    <button id="refreshHistoryBtn" class="btn-secondary">
-      Refresh History
-    </button>
-  </div>
-
-  <div class="footer">
-    NORMS MANAGEMENT · Event Entry Management
-  </div>
-
+  </main>
 </div>
 
 <script>
 /* =========================================================
-   CONFIGURATION AND PARENT COMMUNICATION
-========================================================= */
-
-const CHILD_APP_ID = "NORMS_EXTERNAL_SCANNER";
-const PARENT_APP_ID = "NORMS_EVENT_PARENT";
-
-const params = new URLSearchParams(window.location.search);
-const NONCE = params.get("n") || "";
-const PARENT_ORIGIN = params.get("p") || "";
-
-let connected = false;
-let currentEvent = null;
-let events = [];
-
-/* =========================================================
-   CAMERA STATE
+   NORMS EXTERNAL QR SCANNER
+   One QR scan at a time
 ========================================================= */
 
 let scanner = null;
 let scannerRunning = false;
 let cameraStarting = false;
-let cameraStopping = false;
-
 let busy = false;
-let checkinPending = false;
+let connected = false;
 
+let currentEvent = "";
 let currentPass = null;
 let currentQrToken = null;
 let activeValidationToken = null;
+let cancelledTokens = new Set();
 
-let restartInProgress = false;
+let externalParentOrigin = "";
+let parentNonce = "";
+
 let scanSequence = 0;
+let activeScanSequence = 0;
+let restartSequence = 0;
 
-/* =========================================================
-   HELPERS
-========================================================= */
+const params = new URLSearchParams(window.location.search);
+
+parentNonce = params.get("n") || "";
+externalParentOrigin = params.get("p") || "";
 
 const $ = id => document.getElementById(id);
 
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
-function showMessage(message) {
-  $("mainMessage").textContent = message || "";
-}
+/* =========================================================
+   PARENT CONNECTION VALIDATION
+========================================================= */
 
-function showStatus(message, type = "warning") {
-  const element = $("cameraStatus");
-  element.className = "status " + type;
+function validateParentOrigin() {
 
-  element.innerHTML =
-    '<span class="status-dot"></span>' +
-    '<span id="cameraStatusText"></span>';
+  if (!window.opener) {
+    showStatus("Parent not connected", "error");
+    showMessage("Please open the scanner from the main event management application.");
+    return false;
+  }
 
-  $("cameraStatusText").textContent = message;
-}
-
-function showConnection(message, type = "warning") {
-  const element = $("connectionStatus");
-  element.className = "status " + type;
-
-  element.innerHTML =
-    '<span class="status-dot"></span>' +
-    '<span id="connectionText"></span>';
-
-  $("connectionText").textContent = message;
-}
-
-function setText(id, value) {
-  $(id).textContent =
-    value === undefined || value === null || value === ""
-      ? "-"
-      : String(value);
-}
-
-function postToParent(type, extra = {}) {
-  if (!window.opener || !PARENT_ORIGIN || !NONCE) {
-    console.error("Parent window or connection details missing.");
+  if (!parentNonce || !externalParentOrigin) {
+    showStatus("Invalid connection", "error");
+    showMessage("Missing connection details. Reopen the scanner from the main application.");
     return false;
   }
 
   try {
-    window.opener.postMessage({
-      appId: CHILD_APP_ID,
-      type: type,
-      nonce: NONCE,
-      ...extra
-    }, PARENT_ORIGIN);
+    const url = new URL(externalParentOrigin);
 
-    return true;
-  } catch (error) {
-    console.error("Parent communication error:", error);
-    return false;
-  }
-}
-
-function validParentOrigin(origin) {
-  if (origin !== PARENT_ORIGIN) return false;
-
-  try {
-    const url = new URL(origin);
-
-    return url.protocol === "https:" &&
+    const allowed =
+      url.protocol === "https:" &&
       (
         url.hostname === "script.google.com" ||
         url.hostname.endsWith(".googleusercontent.com")
       );
+
+    if (!allowed) {
+      showStatus("Invalid parent", "error");
+      return false;
+    }
+
+    externalParentOrigin = url.origin;
+    return true;
+
   } catch (error) {
+    showStatus("Invalid connection", "error");
     return false;
   }
 }
 
-function extractQrToken(decodedText) {
-  const value = String(decodedText || "").trim();
-
-  if (!value) return "";
-
-  try {
-    const url = new URL(value);
-    const token = url.searchParams.get("token");
-
-    if (token) return token.trim();
-  } catch (error) {
-    // QR may contain a plain token rather than a URL.
-  }
-
-  return value;
-}
 
 /* =========================================================
-   EVENT SELECTION
+   SEND MESSAGE TO PARENT
 ========================================================= */
 
-function loadEvents(eventList) {
-  events = Array.isArray(eventList) ? eventList : [];
+function sendToParent(type, data = {}) {
+
+  if (!window.opener || !connected) {
+    showMessage("Connection to the main application is unavailable.");
+    return false;
+  }
+
+  window.opener.postMessage({
+    app: "NORMS_EXTERNAL_SCANNER",
+    type: type,
+    nonce: parentNonce,
+    ...data
+  }, externalParentOrigin);
+
+  return true;
+}
+
+
+/* =========================================================
+   RECEIVE PARENT MESSAGES
+========================================================= */
+
+window.addEventListener("message", function(event) {
+
+  if (event.origin !== externalParentOrigin) return;
+  if (event.source !== window.opener) return;
+
+  const data = event.data;
+
+  if (!data || data.app !== "NORMS_EVENT_PARENT") return;
+  if (data.nonce !== parentNonce) return;
+
+  switch (data.type) {
+
+    case "INIT":
+      connected = true;
+      handleInitialization(data.events || []);
+      break;
+
+    case "VALIDATION_RESULT":
+      handleValidation(data.response);
+      break;
+
+    case "CHECKIN_RESULT":
+      handleCheckin(data.response);
+      break;
+
+    case "HISTORY_RESULT":
+      renderHistory(data.records || []);
+      break;
+
+    case "PARENT_ERROR":
+      handleParentError(data);
+      break;
+  }
+});
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+function handleInitialization(events) {
+
+  connected = true;
+
+  showStatus("Connected", "ready");
+  showMessage("Connected to NORMS Event Management.");
 
   const select = $("eventSelect");
   select.innerHTML = "";
 
-  if (events.length === 0) {
-    select.innerHTML =
-      '<option value="">No events available</option>';
-
+  if (!events || events.length === 0) {
+    select.innerHTML = '<option value="">No events available</option>';
     select.disabled = true;
     $("startBtn").disabled = true;
-
-    showMessage("No events were received from the event system.");
     return;
   }
 
-  select.innerHTML =
-    '<option value="">-- Select Event --</option>';
-
   events.forEach(event => {
-    const eventId = event.eventId || event.Event_ID;
-    const eventName = event.eventName || event.Event_Name;
 
-    if (!eventId) return;
+    const id = event.eventId || event.Event_ID;
+    const name = event.eventName || event.Event_Name;
+
+    if (!id || !name) return;
 
     const option = document.createElement("option");
-    option.value = eventId;
-    option.textContent = eventName || eventId;
+    option.value = id;
+    option.textContent = name;
 
     select.appendChild(option);
   });
 
-  select.disabled = false;
-
-  if (events.length === 1) {
-    select.value = events[0].eventId || events[0].Event_ID;
-    select.dispatchEvent(new Event("change"));
+  if (select.options.length > 0) {
+    select.disabled = false;
+    currentEvent = select.value;
+    $("startBtn").disabled = false;
+    loadHistory();
+  } else {
+    select.innerHTML = '<option value="">No valid events found</option>';
   }
-
-  showConnection("Connected to event system", "ready");
 }
 
+
+/* =========================================================
+   EVENT CHANGE
+========================================================= */
+
 $("eventSelect").addEventListener("change", async function() {
-  if (scannerRunning || cameraStarting) {
-    await stopCameraOnly();
-  }
+
+  currentEvent = this.value;
+
+  // Invalidate previous pending response
+  activeScanSequence = ++scanSequence;
+  activeValidationToken = null;
+
+  await stopCameraOnly();
 
   clearParticipantDetails();
 
-  const eventId = this.value;
-
-  currentEvent = events.find(event =>
-    String(event.eventId || event.Event_ID) === String(eventId)
-  ) || null;
-
+  $("cameraPlaceholder").classList.remove("hidden");
+  $("startBtn").classList.remove("hidden");
   $("startBtn").disabled = !currentEvent;
+  $("stopBtn").classList.add("hidden");
 
-  if (!currentEvent) {
-    showMessage("Please select an event.");
-    return;
-  }
+  $("cameraStatus").textContent = "Camera stopped";
 
-  showMessage(
-    "Selected: " +
-    (currentEvent.eventName || currentEvent.Event_Name || "Event") +
-    ". Tap Start Scanner."
-  );
+  showStatus("Event selected", "ready");
+  showMessage("Event changed. Start the scanner when ready.");
 
-  showStatus("Camera stopped", "warning");
-
-  loadHistory();
+  if (currentEvent) loadHistory();
 });
 
-/* =========================================================
-   CAMERA RELEASE
-   Always stop AND clear the previous scanner instance.
-========================================================= */
-
-async function stopCameraOnly() {
-  if (cameraStopping) {
-    while (cameraStopping) {
-      await wait(100);
-    }
-    return;
-  }
-
-  cameraStopping = true;
-
-  const oldScanner = scanner;
-
-  scanner = null;
-  scannerRunning = false;
-
-  try {
-    if (oldScanner) {
-      try {
-        await oldScanner.stop();
-      } catch (error) {
-        console.warn("Camera stop:", error);
-      }
-
-      try {
-        await oldScanner.clear();
-      } catch (error) {
-        console.warn("Camera clear:", error);
-      }
-    }
-  } finally {
-    scannerRunning = false;
-    cameraStopping = false;
-
-    $("cameraPlaceholder").classList.remove("hidden");
-    $("stopBtn").classList.add("hidden");
-  }
-
-  // Allow the browser to release the camera before recreating it.
-  await wait(700);
-}
 
 /* =========================================================
    START CAMERA
 ========================================================= */
 
 async function startScanner() {
+
   if (!currentEvent) {
     showMessage("Please select an event first.");
     return;
   }
 
-  if (scannerRunning || cameraStarting || cameraStopping) {
-    return;
-  }
+  if (scannerRunning || cameraStarting) return;
 
   if (typeof Html5Qrcode === "undefined") {
-    showStatus("Scanner library unavailable", "error");
+    showStatus("Scanner unavailable", "error");
     showMessage("QR scanner library could not be loaded. Check your internet connection.");
     return;
   }
 
   cameraStarting = true;
   $("startBtn").disabled = true;
-  $("startBtn").classList.add("hidden");
 
   showMessage("Starting camera...");
-  showStatus("Starting camera...", "warning");
-
-  let newScanner = null;
 
   try {
-    // Ensure any previous scanner has been released.
+
+    // Remove the previous stopped scanner instance
     if (scanner) {
-      await stopCameraOnly();
+      try {
+        await scanner.clear();
+      } catch (error) {
+        console.warn("Previous scanner cleanup:", error);
+      }
+      scanner = null;
     }
 
-    newScanner = new Html5Qrcode("reader");
-    scanner = newScanner;
+    scanner = new Html5Qrcode("reader");
 
-    const qrboxSize = Math.max(
-      180,
-      Math.min(280, window.innerWidth - 70)
+    const qrboxSize = Math.min(
+      260,
+      Math.floor(Math.min(window.innerWidth - 70, 300))
     );
 
-    await newScanner.start(
+    await scanner.start(
       { facingMode: "environment" },
       {
         fps: 10,
@@ -780,178 +738,217 @@ async function startScanner() {
         aspectRatio: 1
       },
       onScanSuccess,
-      function() {
-        // Normal scan frames that do not contain a QR code.
-      }
+      function() {}
     );
 
-    // A different scanner may have replaced this instance.
-    if (scanner !== newScanner) {
-      try {
-        await newScanner.stop();
-        await newScanner.clear();
-      } catch (error) {}
-      return;
-    }
-
     scannerRunning = true;
+    cameraStarting = false;
 
     $("cameraPlaceholder").classList.add("hidden");
     $("startBtn").classList.add("hidden");
     $("stopBtn").classList.remove("hidden");
 
-    showStatus("Camera active - Ready to scan", "ready");
-    showMessage("Ready. Scan one participant QR code.");
+    $("cameraStatus").textContent = "Camera active";
+
+    showStatus("Ready to scan", "ready");
+    showMessage("Point the camera towards the participant's QR code.");
 
   } catch (error) {
-    console.error("Camera start error:", error);
-
-    if (scanner === newScanner) {
-      scanner = null;
-    }
 
     scannerRunning = false;
-
-    if (newScanner) {
-      try {
-        await newScanner.clear();
-      } catch (clearError) {}
-    }
-
-    $("cameraPlaceholder").classList.remove("hidden");
-    $("stopBtn").classList.add("hidden");
-    $("startBtn").classList.remove("hidden");
-    $("startBtn").disabled = false;
-
-    showStatus("Camera error", "error");
-
-    showMessage(
-      "Camera could not start. Check camera permission and try again. " +
-      (error.message || error)
-    );
-
-  } finally {
     cameraStarting = false;
 
-    if (!scannerRunning) {
-      $("startBtn").classList.remove("hidden");
-      $("startBtn").disabled = !currentEvent;
-    }
+    $("cameraPlaceholder").classList.remove("hidden");
+    $("startBtn").classList.remove("hidden");
+    $("startBtn").disabled = false;
+    $("stopBtn").classList.add("hidden");
+
+    $("cameraStatus").textContent = "Camera stopped";
+
+    showStatus("Camera error", "error");
+    showMessage("Unable to start camera: " + error);
   }
 }
 
 $("startBtn").addEventListener("click", startScanner);
 
+
 /* =========================================================
-   STOP BUTTON
+   STOP CAMERA ONLY
+   Does not reset participant data
+========================================================= */
+
+async function stopCameraOnly() {
+
+  if (scanner && scannerRunning) {
+    try {
+      await scanner.stop();
+    } catch (error) {
+      console.warn("Camera stop:", error);
+    }
+  }
+
+  scannerRunning = false;
+  cameraStarting = false;
+}
+
+
+/* =========================================================
+   MANUAL STOP CAMERA
 ========================================================= */
 
 $("stopBtn").addEventListener("click", async function() {
+
+  // Invalidate pending responses
+  activeScanSequence = ++scanSequence;
+  activeValidationToken = null;
+
   await stopCameraOnly();
 
+  clearParticipantDetails();
+
+  $("cameraPlaceholder").classList.remove("hidden");
   $("startBtn").classList.remove("hidden");
   $("startBtn").disabled = !currentEvent;
+  $("stopBtn").classList.add("hidden");
 
-  showStatus("Camera stopped", "warning");
-  showMessage("Camera stopped. Tap Start Scanner to continue.");
+  $("cameraStatus").textContent = "Camera stopped";
+
+  showStatus("Camera stopped", "");
+  showMessage("Camera stopped. Tap Start Scanner when ready.");
 });
+
+
+/* =========================================================
+   EXTRACT QR TOKEN
+========================================================= */
+
+function extractQrToken(text) {
+
+  try {
+    const url = new URL(text);
+    const token = url.searchParams.get("token");
+
+    if (token) return token;
+
+  } catch (error) {}
+
+  return String(text || "").trim();
+}
+
 
 /* =========================================================
    QR DETECTED
-   One QR only: lock immediately, then stop camera.
+   Immediately stop camera, then validate
 ========================================================= */
 
 async function onScanSuccess(decodedText) {
-  if (busy || !scannerRunning || !currentEvent) {
-    return;
-  }
+
+  if (busy || !scannerRunning) return;
+
+  busy = true;
+
+  const thisScan = ++scanSequence;
+  activeScanSequence = thisScan;
 
   const qrToken = extractQrToken(decodedText);
 
   if (!qrToken) {
+
+    busy = false;
+
+    showStatus("Invalid QR", "error");
+    showMessage("Could not read a valid QR token.");
+
+    await restartForNextParticipant("Invalid QR. Ready to scan again.");
     return;
   }
 
-  busy = true;
-  checkinPending = false;
-
-  const thisScan = ++scanSequence;
-
   currentQrToken = qrToken;
   activeValidationToken = qrToken;
+  currentPass = null;
 
-  $("stopBtn").classList.add("hidden");
-  $("startBtn").classList.add("hidden");
+  $("participantCard").classList.add("hidden");
 
-  showStatus("QR detected", "warning");
-  showMessage("QR detected. Stopping camera and verifying participant...");
+  showStatus("Stopping camera...", "");
+  showMessage("QR detected. Stopping camera...");
 
-  // Stop camera immediately after the first QR detection.
+  // Stop camera immediately after first detection
   await stopCameraOnly();
 
-  // Ignore stale local operations.
-  if (thisScan !== scanSequence || !busy) return;
+  // Ignore if another action invalidated this scan
+  if (activeScanSequence !== thisScan) return;
 
-  showStatus("Verifying participant...", "warning");
+  $("cameraPlaceholder").classList.remove("hidden");
+  $("startBtn").classList.add("hidden");
+  $("stopBtn").classList.add("hidden");
 
-  const sent = postToParent("VALIDATE_QR", {
-    eventId: currentEvent.eventId || currentEvent.Event_ID,
+  $("cameraStatus").textContent = "Camera stopped";
+
+  showStatus("Verifying...", "");
+  showMessage("Verifying participant...");
+
+  const sent = sendToParent("VALIDATE_QR", {
+    eventId: currentEvent,
     qrToken: qrToken
   });
 
   if (!sent) {
+    busy = false;
+    activeValidationToken = null;
+
+    showStatus("Connection error", "error");
+
     await restartForNextParticipant(
-      "Could not contact the event system. Ready for next participant."
+      "Unable to send verification request. Ready to scan again."
     );
-    return;
   }
 }
 
-/* =========================================================
-   CLEAR PARTICIPANT DETAILS
-========================================================= */
-
-function clearParticipantDetails() {
-  currentPass = null;
-  currentQrToken = null;
-  activeValidationToken = null;
-  checkinPending = false;
-
-  $("participantPanel").classList.add("hidden");
-
-  setText("participantName", "-");
-  setText("participantOrganization", "-");
-  setText("participantDesignation", "-");
-  setText("participantMobile", "-");
-  setText("participantEmail", "-");
-  setText("participantPassId", "-");
-
-  $("participantMessage").textContent = "";
-
-  $("confirmBtn").disabled = false;
-  $("cancelBtn").disabled = false;
-}
 
 /* =========================================================
-   VALIDATION RESULT
+   VALIDATION RESPONSE
 ========================================================= */
 
-async function handleValidation(response) {
-  if (!busy || !activeValidationToken) {
+function handleValidation(response) {
+
+  // Ignore old responses after cancellation or another scan
+  if (
+    !busy ||
+    !currentQrToken ||
+    !activeValidationToken
+  ) {
     return;
   }
+
+  const responsePass = response?.pass || response || {};
+
+  const responseToken =
+    responsePass.qrToken ||
+    responsePass.QR_Token ||
+    response?.qrToken;
+
+  if (
+    responseToken &&
+    responseToken !== activeValidationToken
+  ) {
+    return;
+  }
+
+  if (cancelledTokens.has(activeValidationToken)) return;
+
+  busy = false;
 
   if (!response || response.success !== true) {
-    const errorMessage =
-      response?.message ||
-      "Participant verification failed.";
 
-    showStatus("Participant not verified", "error");
+    showStatus("Not verified", "error");
 
-    // Already checked-in QR codes and invalid QR codes
-    // must also release the screen for the next participant.
-    await restartForNextParticipant(
-      errorMessage + " Ready for next participant."
+    showMessage(
+      response?.message || "Participant verification failed."
+    );
+
+    restartForNextParticipant(
+      "Participant not verified. Ready for next scan."
     );
 
     return;
@@ -967,18 +964,24 @@ async function handleValidation(response) {
     participant.passId ||
     participant.Pass_ID;
 
-  if (!passId) {
-    await restartForNextParticipant(
-      "Verification response did not contain a valid pass ID."
-    );
-    return;
-  }
-
   const qrToken =
     pass.qrToken ||
     pass.QR_Token ||
     response.qrToken ||
     currentQrToken;
+
+  if (!passId) {
+
+    showStatus("Invalid pass", "error");
+
+    showMessage("Verified response did not contain a valid pass ID.");
+
+    restartForNextParticipant(
+      "Invalid pass details. Ready for next scan."
+    );
+
+    return;
+  }
 
   currentPass = {
     passId: passId,
@@ -986,171 +989,161 @@ async function handleValidation(response) {
     participant: participant
   };
 
-  setText(
-    "participantName",
-    participant.name || participant.Name
-  );
+  currentQrToken = qrToken;
 
-  setText(
-    "participantOrganization",
-    participant.organization || participant.Organization
-  );
+  $("participantName").textContent =
+    participant.name || participant.Name || "-";
 
-  setText(
-    "participantDesignation",
-    participant.designation || participant.Designation
-  );
+  $("participantOrganization").textContent =
+    participant.organization || participant.Organization || "-";
 
-  setText(
-    "participantMobile",
-    participant.mobile || participant.Mobile
-  );
+  $("participantDesignation").textContent =
+    participant.designation || participant.Designation || "-";
 
-  setText(
-    "participantEmail",
-    participant.email || participant.Email
-  );
+  $("participantMobile").textContent =
+    participant.mobile || participant.Mobile || "-";
 
-  setText("participantPassId", passId);
+  $("participantEmail").textContent =
+    participant.email || participant.Email || "-";
 
-  $("participantPanel").classList.remove("hidden");
+  $("participantCard").classList.remove("hidden");
 
-  $("verificationHeading").textContent = "Participant Verified";
+  $("cameraPlaceholder").classList.remove("hidden");
+  $("cameraStatus").textContent = "Camera stopped";
 
-  $("participantMessage").textContent =
-    response.message || "Participant verified successfully. Confirm check-in.";
-
-  $("confirmBtn").disabled = false;
-  $("cancelBtn").disabled = false;
-
-  showStatus("Participant verified", "ready");
-  showMessage("Please confirm check-in or cancel this participant.");
-
-  // Camera stays stopped until Confirm or Cancel.
+  showStatus("Verified", "ready");
+  showMessage("Participant verified. Confirm check-in or cancel.");
 }
+
 
 /* =========================================================
    CONFIRM CHECK-IN
 ========================================================= */
 
 $("confirmBtn").addEventListener("click", function() {
-  confirmCheckin();
-});
 
-function confirmCheckin() {
-  if (!currentPass || checkinPending || !busy) {
-    return;
-  }
+  if (!currentPass || busy) return;
 
-  checkinPending = true;
+  busy = true;
 
   $("confirmBtn").disabled = true;
   $("cancelBtn").disabled = true;
 
-  showStatus("Recording check-in...", "warning");
-  $("participantMessage").textContent = "Please wait. Recording check-in...";
+  showStatus("Checking in...", "");
+  showMessage("Processing participant check-in...");
 
-  const sent = postToParent("CONFIRM_CHECKIN", {
-    eventId: currentEvent.eventId || currentEvent.Event_ID,
+  const sent = sendToParent("CONFIRM_CHECKIN", {
+    eventId: currentEvent,
     passId: currentPass.passId,
-    qrToken: currentPass.qrToken || currentQrToken,
-    deviceInfo: {
-      userAgent: navigator.userAgent,
-      platform: navigator.platform,
-      screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight
-    }
+    qrToken: currentPass.qrToken,
+    deviceInfo: navigator.userAgent
   });
 
   if (!sent) {
-    checkinPending = false;
+
+    busy = false;
+
     $("confirmBtn").disabled = false;
     $("cancelBtn").disabled = false;
 
     showStatus("Connection error", "error");
-    $("participantMessage").textContent =
-      "Could not contact the event system. Please try again or cancel.";
+    showMessage("Unable to send check-in request.");
   }
-}
+});
+
 
 /* =========================================================
-   CHECK-IN RESULT
+   CHECK-IN RESPONSE
 ========================================================= */
 
-async function handleCheckin(response) {
-  if (!currentPass || !checkinPending) {
-    return;
-  }
+function handleCheckin(response) {
 
-  checkinPending = false;
+  if (!currentPass || !busy) return;
 
-  if (response && response.success === true) {
-    showStatus("Check-in successful", "ready");
+  busy = false;
 
-    $("participantMessage").textContent =
-      response.message || "Participant check-in completed successfully.";
-
-    $("verificationHeading").textContent = "Check-in Successful";
-
-    $("confirmBtn").disabled = true;
-    $("cancelBtn").disabled = true;
-
-    loadHistory();
-
-    await wait(1200);
-
-    await restartForNextParticipant(
-      "Check-in completed. Ready for next participant."
-    );
-
-  } else {
-    const errorMessage =
-      response?.message || "Check-in could not be completed.";
+  if (!response || response.success !== true) {
 
     showStatus("Check-in failed", "error");
 
-    $("participantMessage").textContent =
-      errorMessage + " You can retry or cancel.";
+    showMessage(
+      response?.message || "Check-in could not be completed."
+    );
 
     $("confirmBtn").disabled = false;
     $("cancelBtn").disabled = false;
 
-    // Keep details visible. Camera remains stopped.
-    // Operator can retry or cancel.
-  }
-}
-
-/* =========================================================
-   CANCEL PARTICIPANT
-========================================================= */
-
-$("cancelBtn").addEventListener("click", async function() {
-  if (!currentPass || checkinPending) {
     return;
   }
 
-  $("cancelBtn").disabled = true;
-  $("confirmBtn").disabled = true;
+  // Record successful check-in history
+  loadHistory();
 
-  await restartForNextParticipant(
-    "Participant cancelled. Ready for next participant."
+  // Clear details and automatically restart camera
+  restartForNextParticipant(
+    "Check-in successful. Preparing next participant..."
+  );
+}
+
+
+/* =========================================================
+   CANCEL VERIFICATION
+========================================================= */
+
+$("cancelBtn").addEventListener("click", function() {
+
+  if (!currentPass && !currentQrToken) return;
+
+  if (currentQrToken) {
+    cancelledTokens.add(currentQrToken);
+  }
+
+  // Invalidate pending validation response
+  activeScanSequence = ++scanSequence;
+  activeValidationToken = null;
+
+  busy = false;
+
+  // Clear details and automatically restart camera
+  restartForNextParticipant(
+    "Verification cancelled. Preparing next participant..."
   );
 });
 
+
 /* =========================================================
-   AUTOMATIC RESET AND CAMERA RESTART
+   CLEAR PARTICIPANT DETAILS
+========================================================= */
+
+function clearParticipantDetails() {
+
+  currentPass = null;
+  currentQrToken = null;
+
+  $("participantCard").classList.add("hidden");
+
+  $("participantName").textContent = "-";
+  $("participantOrganization").textContent = "-";
+  $("participantDesignation").textContent = "-";
+  $("participantMobile").textContent = "-";
+  $("participantEmail").textContent = "-";
+
+  $("confirmBtn").disabled = false;
+  $("cancelBtn").disabled = false;
+}
+
+
+/* =========================================================
+   AUTOMATIC RESTART FOR NEXT PARTICIPANT
 ========================================================= */
 
 async function restartForNextParticipant(message) {
-  if (restartInProgress) return;
 
-  restartInProgress = true;
+  const thisRestart = ++restartSequence;
 
-  // Invalidate any pending local scan operation.
-  scanSequence++;
-
+  // Clear current participant and scan state
   busy = false;
-  checkinPending = false;
+  activeValidationToken = null;
 
   clearParticipantDetails();
 
@@ -1158,197 +1151,172 @@ async function restartForNextParticipant(message) {
   $("startBtn").classList.add("hidden");
   $("stopBtn").classList.add("hidden");
 
+  $("cameraStatus").textContent = "Restarting camera";
+
+  showStatus("Preparing camera...", "");
   showMessage(message || "Preparing next participant...");
 
-  try {
-    // Release old camera instance completely.
-    await stopCameraOnly();
+  // Ensure previous camera has stopped
+  await stopCameraOnly();
 
-    // Give the browser time to release the camera.
-    await wait(700);
+  // Prevent an older restart from interfering
+  if (thisRestart !== restartSequence) return;
 
-    if (currentEvent) {
-      await startScanner();
-    } else {
-      showStatus("Select an event", "warning");
-      $("startBtn").classList.remove("hidden");
-      $("startBtn").disabled = true;
-    }
+  // Allow the previous camera instance to release its resources
+  await new Promise(resolve => setTimeout(resolve, 500));
 
-  } catch (error) {
-    console.error("Camera restart error:", error);
+  if (thisRestart !== restartSequence) return;
 
-    scannerRunning = false;
+  // Automatically start camera again
+  await startScanner();
+}
 
-    showStatus("Camera restart failed", "error");
-    showMessage("Please tap Start Scanner to continue.");
 
-    $("cameraPlaceholder").classList.remove("hidden");
-    $("startBtn").classList.remove("hidden");
-    $("startBtn").disabled = !currentEvent;
+/* =========================================================
+   PARENT ERROR
+========================================================= */
 
-  } finally {
-    restartInProgress = false;
+function handleParentError(data) {
+
+  busy = false;
+
+  showStatus("Application error", "error");
+
+  showMessage(
+    data.message || "An error occurred in the main application."
+  );
+
+  // If a participant was not yet displayed, prepare another scan
+  if (!currentPass) {
+    restartForNextParticipant(
+      "Application error. Preparing scanner again..."
+    );
+  } else {
+    $("confirmBtn").disabled = false;
+    $("cancelBtn").disabled = false;
   }
 }
 
+
 /* =========================================================
-   HISTORY
+   LOAD HISTORY
 ========================================================= */
 
 function loadHistory() {
+
   if (!currentEvent || !connected) return;
 
-  postToParent("LOAD_HISTORY", {
-    eventId: currentEvent.eventId || currentEvent.Event_ID
+  sendToParent("LOAD_HISTORY", {
+    eventId: currentEvent
   });
 }
 
-$("refreshHistoryBtn").addEventListener("click", loadHistory);
+
+/* =========================================================
+   DISPLAY HISTORY
+========================================================= */
 
 function renderHistory(records) {
-  const list = $("historyList");
 
-  if (!Array.isArray(records) || records.length === 0) {
-    list.innerHTML =
-      '<div class="empty-history">No check-ins found.</div>';
+  const container = $("historyList");
+  container.innerHTML = "";
+
+  if (!records || records.length === 0) {
+
+    container.innerHTML =
+      '<div class="empty-history">No check-ins yet</div>';
+
     return;
   }
 
-  list.innerHTML = "";
+  records.slice(0, 10).forEach(record => {
 
-  records.slice(0, 20).forEach(record => {
-    const item = document.createElement("div");
-    item.className = "history-item";
+    const name =
+      record.name || record.Name || "Participant";
 
-    const name = document.createElement("div");
-    name.className = "history-name";
-    name.textContent = record.name || record.Name || "Participant";
+    const organization =
+      record.organization || record.Organization || "";
 
-    const organization = record.organization || record.Organization || "";
     const time =
       record.time ||
       record.Time ||
       record.checkInTime ||
-      record.Check_In_Time ||
       "";
 
-    const meta = document.createElement("div");
-    meta.className = "history-meta";
-    meta.textContent = [organization, time].filter(Boolean).join(" · ");
+    const item = document.createElement("div");
+    item.className = "history-item";
 
-    item.appendChild(name);
-    item.appendChild(meta);
+    const nameElement = document.createElement("div");
+    nameElement.className = "history-name";
+    nameElement.textContent = name;
 
-    list.appendChild(item);
+    const metaElement = document.createElement("div");
+    metaElement.className = "history-meta";
+
+    metaElement.textContent =
+      [organization, time].filter(Boolean).join(" • ");
+
+    item.appendChild(nameElement);
+    item.appendChild(metaElement);
+
+    container.appendChild(item);
   });
 }
 
+
 /* =========================================================
-   PARENT MESSAGE LISTENER
+   STATUS AND MESSAGE HELPERS
 ========================================================= */
 
-window.addEventListener("message", async function(event) {
-  if (!validParentOrigin(event.origin)) {
-    return;
+function showStatus(message, className = "") {
+
+  const status = $("connectionStatus");
+
+  status.textContent = message;
+  status.className = "status";
+
+  if (className) {
+    status.classList.add(className);
   }
+}
 
-  if (event.source !== window.opener) {
-    return;
-  }
+function showMessage(message) {
+  $("message").textContent = message;
+}
 
-  const data = event.data || {};
-
-  if (data.appId !== PARENT_APP_ID) {
-    return;
-  }
-
-  if (data.nonce !== NONCE) {
-    return;
-  }
-
-  switch (data.type) {
-
-    case "INIT":
-      connected = true;
-
-      showConnection("Connected to event system", "ready");
-
-      loadEvents(data.events || []);
-      break;
-
-    case "VALIDATION_RESULT":
-      await handleValidation(data.response);
-      break;
-
-    case "CHECKIN_RESULT":
-      await handleCheckin(data.response);
-      break;
-
-    case "HISTORY_RESULT":
-      renderHistory(data.records || []);
-      break;
-
-    case "PARENT_ERROR":
-      showConnection("Event system error", "error");
-
-      if (busy && !currentPass) {
-        await restartForNextParticipant(
-          data.message || "Event system error. Ready for next participant."
-        );
-      } else {
-        showMessage(data.message || "An event system error occurred.");
-      }
-      break;
-  }
-});
 
 /* =========================================================
    INITIAL CONNECTION
 ========================================================= */
 
-window.addEventListener("load", function() {
-  if (!NONCE || !PARENT_ORIGIN) {
-    showConnection("Invalid scanner connection", "error");
-    showMessage(
-      "Open this scanner from the authenticated NORMS event application."
-    );
-    return;
-  }
+if (validateParentOrigin()) {
 
-  if (!window.opener) {
-    showConnection("Parent window unavailable", "error");
-    showMessage(
-      "Please close this page and open the scanner from the NORMS event application."
-    );
-    return;
-  }
+  connected = true;
 
-  if (!validParentOrigin(PARENT_ORIGIN)) {
-    showConnection("Invalid parent address", "error");
-    showMessage("The scanner connection address is not permitted.");
-    return;
-  }
+  showStatus("Connecting...", "");
 
-  // Tell the parent application that the scanner is ready.
-  postToParent("SCANNER_READY");
+  sendToParent("SCANNER_READY", {
+    appVersion: "3.0"
+  });
 
-  showConnection("Connecting to event system...", "warning");
-  showMessage("Waiting for event information...");
-});
+} else {
+
+  connected = false;
+  $("startBtn").disabled = true;
+}
+
 
 /* =========================================================
-   PAGE VISIBILITY / CLEANUP
+   CLEANUP
 ========================================================= */
 
 window.addEventListener("beforeunload", function() {
+
   if (scanner && scannerRunning) {
-    try {
-      scanner.stop();
-    } catch (error) {}
+    scanner.stop().catch(function() {});
   }
 });
-</script>
 
+</script>
 </body>
 </html>
